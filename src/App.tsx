@@ -341,57 +341,215 @@ export default function App() {
         </div>
       </header>
 
-      {/* Stats & Controls Bar */}
-      <div className={`shrink-0 border-b ${isDark ? 'border-gray-800 bg-gray-900/30' : 'border-gray-100 bg-gray-50/50'}`}>
-        <div className="max-w-[1600px] mx-auto px-4 py-2 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-6">
-            <div className="flex flex-col">
-              <span className={`text-[9px] uppercase tracking-wider font-semibold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Original</span>
-              <span className="font-mono text-xs">{stats.inputSize} B <span className={`text-[9px] ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>({stats.inputTokens} tokens)</span></span>
+      {/* Enhanced Stats Display */}
+      <div className={`shrink-0 border-b ${isDark ? 'border-gray-800 bg-gradient-to-r from-gray-900/40 via-gray-900/30 to-gray-900/40' : 'border-gray-100 bg-gradient-to-r from-gray-50/80 via-white/60 to-gray-50/80'}`}>
+        <div className="max-w-[1600px] mx-auto px-4 py-6">
+          {/* Main Stats Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            {/* Original Size Card */}
+            <div className={`p-6 rounded-xl border ${isDark ? 'bg-gray-800/40 border-gray-700/50 backdrop-blur-sm' : 'bg-white/80 border-gray-200/50 backdrop-blur-sm shadow-sm'}`}>
+              <div className="flex items-center justify-between mb-3">
+                <span className={`text-sm font-bold uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Original</span>
+                <div className={`p-2 rounded-lg ${isDark ? 'bg-gray-700/50' : 'bg-gray-100'}`}>
+                  <FileJson className="w-4 h-4 text-gray-500" />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className="font-mono text-2xl font-bold">{stats.inputSize} B</div>
+                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{stats.inputTokens} tokens</div>
+              </div>
             </div>
-            <div className="flex flex-col">
-              <span className={`text-[9px] uppercase tracking-wider font-semibold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Optimized</span>
-              <span className="font-mono text-xs text-blue-600 dark:text-blue-400">{stats.outputSize} B <span className={`text-[9px] ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>({stats.outputTokens} tokens)</span></span>
+
+            {/* Optimized Size Card */}
+            <div className={`p-6 rounded-xl border ${isDark ? 'bg-gray-800/40 border-gray-700/50 backdrop-blur-sm' : 'bg-white/80 border-gray-200/50 backdrop-blur-sm shadow-sm'}`}>
+              <div className="flex items-center justify-between mb-3">
+                <span className={`text-sm font-bold uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Optimized</span>
+                <div className={`p-2 rounded-lg ${parseFloat(stats.tokenSavings) > 0 ? 'bg-green-500/20' : parseFloat(stats.tokenSavings) < 0 ? 'bg-red-500/20' : 'bg-gray-100'}`}>
+                  <Zap className={`w-4 h-4 ${parseFloat(stats.tokenSavings) > 0 ? 'text-green-500' : parseFloat(stats.tokenSavings) < 0 ? 'text-red-500' : 'text-gray-500'}`} />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className={`font-mono text-2xl font-bold ${parseFloat(stats.tokenSavings) > 0 ? 'text-green-600 dark:text-green-400' : parseFloat(stats.tokenSavings) < 0 ? 'text-red-600 dark:text-red-400' : ''}`}>{stats.outputSize} B</div>
+                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{stats.outputTokens} tokens</div>
+              </div>
             </div>
-            <div className="flex flex-col">
-              <span className={`text-[9px] uppercase tracking-wider font-semibold ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center gap-1`}>
-                Savings <Info className="w-2 h-2" />
-              </span>
-              <span className={`font-bold text-xs ${parseFloat(stats.tokenSavings) > 0 ? 'text-green-600 dark:text-green-400' : parseFloat(stats.tokenSavings) < 0 ? 'text-red-600 dark:text-red-400' : ''}`}>
-                {parseFloat(stats.tokenSavings) > 0 ? '+' : ''}{stats.tokenSavings}%
-              </span>
+
+            {/* Savings Card */}
+            <div className={`p-6 rounded-xl border ${parseFloat(stats.tokenSavings) > 0 ? 
+              (isDark ? 'bg-green-900/20 border-green-700/50 backdrop-blur-sm' : 'bg-green-50/80 border-green-200/50 backdrop-blur-sm shadow-sm') :
+              parseFloat(stats.tokenSavings) < 0 ?
+              (isDark ? 'bg-red-900/20 border-red-700/50 backdrop-blur-sm animate-pulse-error' : 'bg-red-50/80 border-red-200/50 backdrop-blur-sm shadow-sm animate-pulse-error') :
+              (isDark ? 'bg-gray-800/40 border-gray-700/50 backdrop-blur-sm' : 'bg-white/80 border-gray-200/50 backdrop-blur-sm shadow-sm')
+            }`}>
+              <div className="flex items-center justify-between mb-3">
+                <span className={`text-sm font-bold uppercase tracking-wider flex items-center gap-2 ${
+                  parseFloat(stats.tokenSavings) > 0 ? 'text-green-700 dark:text-green-300' :
+                  parseFloat(stats.tokenSavings) < 0 ? 'text-red-700 dark:text-red-300' :
+                  (isDark ? 'text-gray-300' : 'text-gray-700')
+                }`}>
+                  {parseFloat(stats.tokenSavings) > 0 ? 'Savings' : parseFloat(stats.tokenSavings) < 0 ? 'Increase' : 'No Change'}
+                  <Info className="w-3 h-3" />
+                </span>
+                <div className={`p-2 rounded-lg ${
+                  parseFloat(stats.tokenSavings) > 0 ? 'bg-green-500/20' :
+                  parseFloat(stats.tokenSavings) < 0 ? 'bg-red-500/20' : 'bg-gray-100'
+                }`}>
+                  {parseFloat(stats.tokenSavings) > 0 ? (
+                    <CheckCircle2 className="w-4 h-4 text-green-500" />
+                  ) : parseFloat(stats.tokenSavings) < 0 ? (
+                    <AlertCircle className="w-4 h-4 text-red-500" />
+                  ) : (
+                    <Info className="w-4 h-4 text-gray-500" />
+                  )}
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className={`font-mono text-2xl font-bold animate-slide-in-up ${
+                  parseFloat(stats.tokenSavings) > 0 ? 'text-green-600 dark:text-green-400' :
+                  parseFloat(stats.tokenSavings) < 0 ? 'text-red-600 dark:text-red-400' : ''
+                }`}>
+                  {parseFloat(stats.tokenSavings) > 0 ? '+' : ''}{stats.tokenSavings}%
+                </div>
+                <div className={`text-sm ${
+                  parseFloat(stats.tokenSavings) > 0 ? 'text-green-600 dark:text-green-400' :
+                  parseFloat(stats.tokenSavings) < 0 ? 'text-red-600 dark:text-red-400' :
+                  (isDark ? 'text-gray-400' : 'text-gray-600')
+                }`}>
+                  {parseFloat(stats.tokenSavings) > 0 ? 'Tokens saved' :
+                   parseFloat(stats.tokenSavings) < 0 ? 'Token overhead' : 'No change'}
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className={`flex items-center gap-2 p-0.5 rounded-lg border ${isDark ? 'bg-gray-800 border-gray-600' : 'bg-gray-100 border-gray-300'}`}>
-              <label className={`flex items-center gap-1.5 cursor-pointer group px-2 py-1 rounded-md transition-all ${isDark ? 'hover:bg-gray-700' : 'hover:bg-white hover:shadow-sm'}`}>
-                <input 
-                  type="checkbox" 
-                  checked={options.aggressive}
-                  onChange={(e) => setOptions({ ...options, aggressive: e.target.checked })}
-                  className={`w-3 h-3 rounded transition-all ${isDark ? 'border-gray-400 bg-gray-700 text-blue-400 focus:ring-blue-400 focus:ring-offset-gray-800' : 'border-gray-500 bg-white text-blue-600 focus:ring-blue-500 focus:ring-offset-white'} focus:ring-2 focus:ring-offset-2`}
-                />
-                <span className={`text-[10px] font-semibold transition-colors ${isDark ? 'text-gray-200 group-hover:text-blue-300' : 'text-gray-700 group-hover:text-blue-700'}`}>Aggressive</span>
-              </label>
-              <label className={`flex items-center gap-1.5 cursor-pointer group px-2 py-1 rounded-md transition-all ${isDark ? 'hover:bg-gray-700' : 'hover:bg-white hover:shadow-sm'}`}>
-                <input 
-                  type="checkbox" 
-                  checked={options.unsafe}
-                  onChange={(e) => setOptions({ ...options, unsafe: e.target.checked })}
-                  className={`w-3 h-3 rounded transition-all ${isDark ? 'border-gray-400 bg-gray-700 text-blue-400 focus:ring-blue-400 focus:ring-offset-gray-800' : 'border-gray-500 bg-white text-blue-600 focus:ring-blue-500 focus:ring-offset-white'} focus:ring-2 focus:ring-offset-2`}
-                />
-                <span className={`text-[10px] font-semibold transition-colors ${isDark ? 'text-gray-200 group-hover:text-blue-300' : 'text-gray-700 group-hover:text-blue-700'}`}>Unsafe</span>
-              </label>
+          {/* Visual Progress Bar */}
+          <div className={`p-4 rounded-lg border ${isDark ? 'bg-gray-800/20 border-gray-700/30' : 'bg-gray-50/50 border-gray-200/30'}`}>
+            <div className="flex items-center justify-between mb-3">
+              <span className={`text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Compression Analysis</span>
+              <span className={`text-xs font-mono ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                {stats.inputTokens} → {stats.outputTokens} tokens
+              </span>
             </div>
-            <div className={`w-px h-5 ${isDark ? 'bg-gray-800' : 'bg-gray-200'}`} />
-            <button 
-              onClick={handleVerify}
-              className="flex items-center gap-1.5 text-[10px] font-bold bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-md transition-all shadow-sm active:scale-95"
-            >
-              <CheckCircle2 className="w-3 h-3" />
-              Verify
-            </button>
+            
+            <div className="flex items-center gap-4">
+              {/* Circular Progress */}
+              <div className="relative w-16 h-16 shrink-0">
+                <svg className="w-16 h-16 transform -rotate-90" viewBox="0 0 64 64">
+                  <circle
+                    cx="32"
+                    cy="32"
+                    r="28"
+                    stroke={isDark ? '#374151' : '#e5e7eb'}
+                    strokeWidth="6"
+                    fill="transparent"
+                  />
+                  <circle
+                    cx="32"
+                    cy="32"
+                    r="28"
+                    stroke={parseFloat(stats.tokenSavings) > 0 ? '#10b981' : parseFloat(stats.tokenSavings) < 0 ? '#ef4444' : '#6b7280'}
+                    strokeWidth="6"
+                    fill="transparent"
+                    strokeLinecap="round"
+                    strokeDasharray={`${2 * Math.PI * 28}`}
+                    strokeDashoffset={`${2 * Math.PI * 28 * (1 - Math.abs(parseFloat(stats.tokenSavings)) / 100)}`}
+                    className="transition-all duration-700 ease-out"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className={`text-xs font-bold ${
+                    parseFloat(stats.tokenSavings) > 0 ? 'text-green-600 dark:text-green-400' :
+                    parseFloat(stats.tokenSavings) < 0 ? 'text-red-600 dark:text-red-400' : 'text-gray-600'
+                  }`}>
+                    {Math.abs(parseFloat(stats.tokenSavings))}%
+                  </span>
+                </div>
+              </div>
+              
+              {/* Linear Progress */}
+              <div className="flex-1">
+                <div className="relative">
+                  <div className={`h-4 rounded-full overflow-hidden ${isDark ? 'bg-gray-700' : 'bg-gray-200'}`}>
+                    <div 
+                      className={`h-full transition-all duration-700 ease-out progress-bar-glow ${
+                        parseFloat(stats.tokenSavings) > 0 ? 'bg-gradient-to-r from-green-500 to-emerald-400' :
+                        parseFloat(stats.tokenSavings) < 0 ? 'bg-gradient-to-r from-red-500 to-rose-400' :
+                        'bg-gradient-to-r from-gray-400 to-gray-500'
+                      }`}
+                      style={{ 
+                        width: `${Math.max(Math.min((stats.outputTokens / stats.inputTokens) * 100, 100), 0)}%`
+                      }}
+                    />
+                  </div>
+                  {/* Size comparison labels */}
+                  <div className="flex justify-between mt-2 text-xs">
+                    <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>0%</span>
+                    <span className={`font-semibold ${
+                      parseFloat(stats.tokenSavings) > 0 ? 'text-green-600 dark:text-green-400' :
+                      parseFloat(stats.tokenSavings) < 0 ? 'text-red-600 dark:text-red-400' :
+                      (isDark ? 'text-gray-400' : 'text-gray-600')
+                    }`}>
+                      {((stats.outputTokens / stats.inputTokens) * 100).toFixed(1)}% of original
+                    </span>
+                    <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>100%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Status Message */}
+            {parseFloat(stats.tokenSavings) !== 0 && (
+              <div className={`mt-4 p-3 rounded-lg border-l-4 ${
+                parseFloat(stats.tokenSavings) > 0 ? 
+                (isDark ? 'bg-green-900/20 border-green-500 text-green-200' : 'bg-green-50 border-green-500 text-green-800') :
+                (isDark ? 'bg-red-900/20 border-red-500 text-red-200' : 'bg-red-50 border-red-500 text-red-800')
+              }`}>
+                <p className="text-sm font-medium">
+                  {parseFloat(stats.tokenSavings) > 0 ? (
+                    `✅ Successfully compressed! You'll save ${Math.abs(parseFloat(stats.tokenSavings))}% on LLM API costs.`
+                  ) : (
+                    `⚠️ Compression increased size by ${Math.abs(parseFloat(stats.tokenSavings))}%. Original data may already be optimized.`
+                  )}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Controls Bar */}
+        <div className="max-w-[1600px] mx-auto px-4 pb-4">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+
+            <div className="flex items-center gap-3">
+              <div className={`flex items-center gap-2 p-0.5 rounded-lg border ${isDark ? 'bg-gray-800 border-gray-600' : 'bg-gray-100 border-gray-300'}`}>
+                <label className={`flex items-center gap-1.5 cursor-pointer group px-2 py-1 rounded-md transition-all ${isDark ? 'hover:bg-gray-700' : 'hover:bg-white hover:shadow-sm'}`}>
+                  <input 
+                    type="checkbox" 
+                    checked={options.aggressive}
+                    onChange={(e) => setOptions({ ...options, aggressive: e.target.checked })}
+                    className={`w-3 h-3 rounded transition-all ${isDark ? 'border-gray-400 bg-gray-700 text-blue-400 focus:ring-blue-400 focus:ring-offset-gray-800' : 'border-gray-500 bg-white text-blue-600 focus:ring-blue-500 focus:ring-offset-white'} focus:ring-2 focus:ring-offset-2`}
+                  />
+                  <span className={`text-[10px] font-semibold transition-colors ${isDark ? 'text-gray-200 group-hover:text-blue-300' : 'text-gray-700 group-hover:text-blue-700'}`}>Aggressive</span>
+                </label>
+                <label className={`flex items-center gap-1.5 cursor-pointer group px-2 py-1 rounded-md transition-all ${isDark ? 'hover:bg-gray-700' : 'hover:bg-white hover:shadow-sm'}`}>
+                  <input 
+                    type="checkbox" 
+                    checked={options.unsafe}
+                    onChange={(e) => setOptions({ ...options, unsafe: e.target.checked })}
+                    className={`w-3 h-3 rounded transition-all ${isDark ? 'border-gray-400 bg-gray-700 text-blue-400 focus:ring-blue-400 focus:ring-offset-gray-800' : 'border-gray-500 bg-white text-blue-600 focus:ring-blue-500 focus:ring-offset-white'} focus:ring-2 focus:ring-offset-2`}
+                  />
+                  <span className={`text-[10px] font-semibold transition-colors ${isDark ? 'text-gray-200 group-hover:text-blue-300' : 'text-gray-700 group-hover:text-blue-700'}`}>Unsafe</span>
+                </label>
+              </div>
+              <div className={`w-px h-5 ${isDark ? 'bg-gray-800' : 'bg-gray-200'}`} />
+              <button 
+                onClick={handleVerify}
+                className="flex items-center gap-1.5 text-[10px] font-bold bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-md transition-all shadow-sm active:scale-95"
+              >
+                <CheckCircle2 className="w-3 h-3" />
+                Verify
+              </button>
+            </div>
           </div>
         </div>
       </div>
