@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect, useMemo } from 'react';
 import { optimize, restore } from 'llm-chat-msg-compressor';
 import debounce from 'lodash.debounce';
