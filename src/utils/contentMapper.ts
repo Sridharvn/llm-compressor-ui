@@ -156,6 +156,19 @@ export class ContentMapper {
   }
 
   private static extractOptions(markdown: string) {
+    // Look for Configuration or Options section specifically
+    const optionsSection = markdown.match(/##?\s*(?:Configuration|Options)([\s\S]*?)(?=##|$)/i);
+    if (optionsSection) {
+      const codeMatch = optionsSection[1].match(/```(?:javascript|js|typescript|ts)?\s*\n([\s\S]*?)```/);
+      if (codeMatch) {
+        return {
+          code: codeMatch[1].trim(),
+          language: 'javascript',
+        };
+      }
+    }
+
+    // Fallback to searching for code block with 'options' if section not found
     const optionsMatch = markdown.match(/```(?:javascript|js|typescript|ts)?\s*\n([\s\S]*?options[\s\S]*?)```/i);
     return {
       code: optionsMatch ? optionsMatch[1].trim() : this.getDefaultOptionsCode(),

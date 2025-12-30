@@ -18,7 +18,8 @@ import {
   FileJson,
   Github,
   Info,
-  Download
+  Download,
+  Linkedin
 } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import { useDocumentation } from './hooks/useDocumentation';
@@ -429,6 +430,15 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-2">
+            <a 
+              href="https://www.linkedin.com/in/sridhar-v-nampoothiripad/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className={`p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors`}
+              title="LinkedIn Profile"
+            >
+              <Linkedin className="w-4 h-4" />
+            </a>
             <a 
               href="https://www.npmjs.com/package/llm-chat-msg-compressor" 
               target="_blank" 
