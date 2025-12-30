@@ -309,7 +309,7 @@ export default function App() {
             </div>
             <div>
               <h1 className="font-bold text-base tracking-tight">LLM Compressor</h1>
-              <p className={`text-[10px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>llm-chat-msg-compressor</p>
+              <p className={`text-[10px] ${isDark ? 'text-gray-500' : 'text-gray-600'}`}>llm-chat-msg-compressor</p>
             </div>
           </div>
 
@@ -338,42 +338,42 @@ export default function App() {
         <div className="max-w-[1600px] mx-auto px-4 py-2 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-6">
             <div className="flex flex-col">
-              <span className="text-[9px] uppercase tracking-wider font-semibold opacity-50">Original</span>
-              <span className="font-mono text-xs">{stats.inputSize} B <span className="opacity-40 text-[9px]">({stats.inputTokens} tokens)</span></span>
+              <span className={`text-[9px] uppercase tracking-wider font-semibold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Original</span>
+              <span className="font-mono text-xs">{stats.inputSize} B <span className={`text-[9px] ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>({stats.inputTokens} tokens)</span></span>
             </div>
             <div className="flex flex-col">
-              <span className="text-[9px] uppercase tracking-wider font-semibold opacity-50">Optimized</span>
-              <span className="font-mono text-xs text-blue-500">{stats.outputSize} B <span className="opacity-40 text-[9px]">({stats.outputTokens} tokens)</span></span>
+              <span className={`text-[9px] uppercase tracking-wider font-semibold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Optimized</span>
+              <span className="font-mono text-xs text-blue-600 dark:text-blue-400">{stats.outputSize} B <span className={`text-[9px] ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>({stats.outputTokens} tokens)</span></span>
             </div>
             <div className="flex flex-col">
-              <span className="text-[9px] uppercase tracking-wider font-semibold opacity-50 flex items-center gap-1">
+              <span className={`text-[9px] uppercase tracking-wider font-semibold ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center gap-1`}>
                 Savings <Info className="w-2 h-2" />
               </span>
-              <span className={`font-bold text-xs ${parseFloat(stats.tokenSavings) > 0 ? 'text-green-500' : parseFloat(stats.tokenSavings) < 0 ? 'text-red-500' : ''}`}>
+              <span className={`font-bold text-xs ${parseFloat(stats.tokenSavings) > 0 ? 'text-green-600 dark:text-green-400' : parseFloat(stats.tokenSavings) < 0 ? 'text-red-600 dark:text-red-400' : ''}`}>
                 {parseFloat(stats.tokenSavings) > 0 ? '+' : ''}{stats.tokenSavings}%
               </span>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 bg-gray-200/50 dark:bg-gray-800/50 p-0.5 rounded-lg border border-gray-200 dark:border-gray-700">
-              <label className="flex items-center gap-1.5 cursor-pointer group px-2 py-1 rounded-md hover:bg-white dark:hover:bg-gray-700 transition-all">
+            <div className={`flex items-center gap-2 p-0.5 rounded-lg border ${isDark ? 'bg-gray-800 border-gray-600' : 'bg-gray-100 border-gray-300'}`}>
+              <label className={`flex items-center gap-1.5 cursor-pointer group px-2 py-1 rounded-md transition-all ${isDark ? 'hover:bg-gray-700' : 'hover:bg-white hover:shadow-sm'}`}>
                 <input 
                   type="checkbox" 
                   checked={options.aggressive}
                   onChange={(e) => setOptions({ ...options, aggressive: e.target.checked })}
-                  className="w-3 h-3 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className={`w-3 h-3 rounded transition-all ${isDark ? 'border-gray-400 bg-gray-700 text-blue-400 focus:ring-blue-400 focus:ring-offset-gray-800' : 'border-gray-500 bg-white text-blue-600 focus:ring-blue-500 focus:ring-offset-white'} focus:ring-2 focus:ring-offset-2`}
                 />
-                <span className="text-[10px] font-semibold group-hover:text-blue-500 transition-colors">Aggressive</span>
+                <span className={`text-[10px] font-semibold transition-colors ${isDark ? 'text-gray-200 group-hover:text-blue-300' : 'text-gray-700 group-hover:text-blue-700'}`}>Aggressive</span>
               </label>
-              <label className="flex items-center gap-1.5 cursor-pointer group px-2 py-1 rounded-md hover:bg-white dark:hover:bg-gray-700 transition-all">
+              <label className={`flex items-center gap-1.5 cursor-pointer group px-2 py-1 rounded-md transition-all ${isDark ? 'hover:bg-gray-700' : 'hover:bg-white hover:shadow-sm'}`}>
                 <input 
                   type="checkbox" 
                   checked={options.unsafe}
                   onChange={(e) => setOptions({ ...options, unsafe: e.target.checked })}
-                  className="w-3 h-3 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className={`w-3 h-3 rounded transition-all ${isDark ? 'border-gray-400 bg-gray-700 text-blue-400 focus:ring-blue-400 focus:ring-offset-gray-800' : 'border-gray-500 bg-white text-blue-600 focus:ring-blue-500 focus:ring-offset-white'} focus:ring-2 focus:ring-offset-2`}
                 />
-                <span className="text-[10px] font-semibold group-hover:text-blue-500 transition-colors">Unsafe</span>
+                <span className={`text-[10px] font-semibold transition-colors ${isDark ? 'text-gray-200 group-hover:text-blue-300' : 'text-gray-700 group-hover:text-blue-700'}`}>Unsafe</span>
               </label>
             </div>
             <div className={`w-px h-5 ${isDark ? 'bg-gray-800' : 'bg-gray-200'}`} />
@@ -397,7 +397,7 @@ export default function App() {
             <div className={`shrink-0 px-4 py-2 border-b flex items-center justify-between ${isDark ? 'bg-gray-800/50 border-gray-800' : 'bg-gray-50 border-gray-200'}`}>
               <div className="flex items-center gap-2">
                 <FileJson className="w-4 h-4 text-blue-500" />
-                <span className="text-xs font-bold uppercase tracking-wider opacity-70">Input JSON</span>
+                <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Input JSON</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <button onClick={handleLoadSample} className="px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-[10px] font-bold transition-colors">SAMPLE</button>
@@ -407,7 +407,7 @@ export default function App() {
                 <button onClick={handleClear} className="p-1.5 rounded hover:bg-red-100 dark:hover:bg-red-900/30 text-red-500 transition-colors" title="Clear"><Trash2 className="w-4 h-4" /></button>
               </div>
             </div>
-            <div className="flex-1 overflow-hidden relative bg-white dark:bg-gray-950">
+            <div className="flex-1 overflow-hidden relative bg-gray-50 dark:bg-gray-900">
               <div className="absolute inset-0 overflow-auto custom-scrollbar">
                 <Editor
                   value={input}
@@ -419,6 +419,8 @@ export default function App() {
                     fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
                     fontSize: 13,
                     lineHeight: '1.5',
+                    backgroundColor: isDark ? '#111827' : '#f9fafb',
+                    color: isDark ? '#e5e7eb' : '#374151',
                   }}
                 />
               </div>
@@ -437,16 +439,24 @@ export default function App() {
           {/* Output Pane */}
           <div className={`flex-1 flex flex-col rounded-xl border overflow-hidden ${isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-200 shadow-lg'}`}>
             <div className={`shrink-0 px-4 py-2 border-b flex items-center justify-between ${isDark ? 'bg-gray-800/50 border-gray-800' : 'bg-gray-50 border-gray-200'}`}>
-              <div className="flex bg-gray-200 dark:bg-gray-800 p-1 rounded-lg">
+              <div className={`flex p-1 rounded-lg border ${isDark ? 'bg-gray-800 border-gray-600' : 'bg-gray-100 border-gray-300'}`}>
                 <button 
                   onClick={() => setOutputMode('optimized')}
-                  className={`px-4 py-1 text-[10px] font-bold rounded-md transition-all ${outputMode === 'optimized' ? 'bg-white dark:bg-gray-700 shadow-sm text-blue-600' : 'opacity-50 hover:opacity-80'}`}
+                  className={`px-4 py-1 text-[10px] font-bold rounded-md transition-all ${
+                    outputMode === 'optimized' 
+                      ? `${isDark ? 'bg-gray-700 text-blue-400 shadow-sm border border-blue-500/30' : 'bg-white text-blue-600 shadow-sm border border-blue-200'}` 
+                      : `${isDark ? 'text-gray-400 hover:text-gray-300 hover:bg-gray-700/50' : 'text-gray-600 hover:text-gray-700 hover:bg-gray-200/50'}`
+                  }`}
                 >
                   OPTIMIZED
                 </button>
                 <button 
                   onClick={() => setOutputMode('restored')}
-                  className={`px-4 py-1 text-[10px] font-bold rounded-md transition-all ${outputMode === 'restored' ? 'bg-white dark:bg-gray-700 shadow-sm text-emerald-600' : 'opacity-50 hover:opacity-80'}`}
+                  className={`px-4 py-1 text-[10px] font-bold rounded-md transition-all ${
+                    outputMode === 'restored' 
+                      ? `${isDark ? 'bg-gray-700 text-emerald-400 shadow-sm border border-emerald-500/30' : 'bg-white text-emerald-600 shadow-sm border border-emerald-200'}` 
+                      : `${isDark ? 'text-gray-400 hover:text-gray-300 hover:bg-gray-700/50' : 'text-gray-600 hover:text-gray-700 hover:bg-gray-200/50'}`
+                  }`}
                 >
                   RESTORED
                 </button>
@@ -456,7 +466,7 @@ export default function App() {
                 <button onClick={handleCopy} className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" title="Copy"><Copy className="w-4 h-4" /></button>
               </div>
             </div>
-            <div className="flex-1 overflow-hidden relative bg-gray-50/50 dark:bg-gray-900/50">
+            <div className="flex-1 overflow-hidden relative bg-gray-50 dark:bg-gray-900">
               <div className="absolute inset-0 overflow-auto custom-scrollbar">
                 <Editor
                   value={outputMode === 'optimized' ? output : restored}
@@ -469,6 +479,8 @@ export default function App() {
                     fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
                     fontSize: 13,
                     lineHeight: '1.5',
+                    backgroundColor: isDark ? '#111827' : '#f9fafb',
+                    color: isDark ? '#d1d5db' : '#4b5563',
                   }}
                 />
               </div>
