@@ -431,12 +431,12 @@ export default function App() {
             <div className={`p-6 rounded-xl border ${isDark ? 'bg-gray-800/40 border-gray-700/50 backdrop-blur-sm' : 'bg-white/80 border-gray-200/50 backdrop-blur-sm shadow-sm'}`}>
               <div className="flex items-center justify-between mb-3">
                 <span className={`text-sm font-bold uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Optimized</span>
-                <div className={`p-2 rounded-lg ${parseFloat(stats.tokenSavings) > 0 ? 'bg-green-500/20' : parseFloat(stats.tokenSavings) < 0 ? 'bg-red-500/20' : 'bg-gray-100'}`}>
-                  <Zap className={`w-4 h-4 ${parseFloat(stats.tokenSavings) > 0 ? 'text-green-500' : parseFloat(stats.tokenSavings) < 0 ? 'text-red-500' : 'text-gray-500'}`} />
+                <div className={`p-2 rounded-lg ${parseFloat(stats.tokenSavings) > 0 ? 'bg-green-500/20' : parseFloat(stats.tokenSavings) < 0 ? 'bg-red-500/20' : 'bg-blue-500/20'}`}>
+                  <Zap className={`w-4 h-4 ${parseFloat(stats.tokenSavings) > 0 ? 'text-green-500' : parseFloat(stats.tokenSavings) < 0 ? 'text-red-500' : 'text-blue-500'}`} />
                 </div>
               </div>
               <div className="space-y-2">
-                <div className={`font-mono text-2xl font-bold ${parseFloat(stats.tokenSavings) > 0 ? 'text-green-600 dark:text-green-400' : parseFloat(stats.tokenSavings) < 0 ? 'text-red-600 dark:text-red-400' : ''}`}>{stats.outputSize} B</div>
+                <div className={`font-mono text-2xl font-bold ${parseFloat(stats.tokenSavings) > 0 ? 'text-green-600 dark:text-green-400' : parseFloat(stats.tokenSavings) < 0 ? 'text-red-600 dark:text-red-400' : 'text-blue-600 dark:text-blue-400'}`}>{stats.outputSize} B</div>
                 <div 
                   className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
                   title={`Calculated using ${getEncodingName()}`}
@@ -451,44 +451,44 @@ export default function App() {
               (isDark ? 'bg-green-900/20 border-green-700/50 backdrop-blur-sm' : 'bg-green-50/80 border-green-200/50 backdrop-blur-sm shadow-sm') :
               parseFloat(stats.tokenSavings) < 0 ?
               (isDark ? 'bg-red-900/20 border-red-700/50 backdrop-blur-sm animate-pulse-error' : 'bg-red-50/80 border-red-200/50 backdrop-blur-sm shadow-sm animate-pulse-error') :
-              (isDark ? 'bg-gray-800/40 border-gray-700/50 backdrop-blur-sm' : 'bg-white/80 border-gray-200/50 backdrop-blur-sm shadow-sm')
+              (isDark ? 'bg-blue-900/20 border-blue-700/50 backdrop-blur-sm' : 'bg-blue-50/80 border-blue-200/50 backdrop-blur-sm shadow-sm')
             }`}>
               <div className="flex items-center justify-between mb-3">
                 <span className={`text-sm font-bold uppercase tracking-wider flex items-center gap-2 ${
                   parseFloat(stats.tokenSavings) > 0 ? 'text-green-700 dark:text-green-300' :
                   parseFloat(stats.tokenSavings) < 0 ? 'text-red-700 dark:text-red-300' :
-                  (isDark ? 'text-gray-300' : 'text-gray-700')
+                  'text-blue-700 dark:text-blue-300'
                 }`}>
-                  {parseFloat(stats.tokenSavings) > 0 ? 'Savings' : parseFloat(stats.tokenSavings) < 0 ? 'Increase' : 'No Change'}
+                  {parseFloat(stats.tokenSavings) > 0 ? 'Savings' : parseFloat(stats.tokenSavings) < 0 ? 'Increase' : 'Optimal'}
                   <Info className="w-3 h-3" />
                 </span>
                 <div className={`p-2 rounded-lg ${
                   parseFloat(stats.tokenSavings) > 0 ? 'bg-green-500/20' :
-                  parseFloat(stats.tokenSavings) < 0 ? 'bg-red-500/20' : 'bg-gray-100'
+                  parseFloat(stats.tokenSavings) < 0 ? 'bg-red-500/20' : 'bg-blue-500/20'
                 }`}>
                   {parseFloat(stats.tokenSavings) > 0 ? (
                     <CheckCircle2 className="w-4 h-4 text-green-500" />
                   ) : parseFloat(stats.tokenSavings) < 0 ? (
                     <AlertCircle className="w-4 h-4 text-red-500" />
                   ) : (
-                    <Info className="w-4 h-4 text-gray-500" />
+                    <Info className="w-4 h-4 text-blue-500" />
                   )}
                 </div>
               </div>
               <div className="space-y-2">
                 <div className={`font-mono text-2xl font-bold animate-slide-in-up ${
                   parseFloat(stats.tokenSavings) > 0 ? 'text-green-600 dark:text-green-400' :
-                  parseFloat(stats.tokenSavings) < 0 ? 'text-red-600 dark:text-red-400' : ''
+                  parseFloat(stats.tokenSavings) < 0 ? 'text-red-600 dark:text-red-400' : 'text-blue-600 dark:text-blue-400'
                 }`}>
                   {parseFloat(stats.tokenSavings) > 0 ? '+' : ''}{stats.tokenSavings}%
                 </div>
                 <div className={`text-sm ${
                   parseFloat(stats.tokenSavings) > 0 ? 'text-green-600 dark:text-green-400' :
                   parseFloat(stats.tokenSavings) < 0 ? 'text-red-600 dark:text-red-400' :
-                  (isDark ? 'text-gray-400' : 'text-gray-600')
+                  'text-blue-600 dark:text-blue-400'
                 }`}>
                   {parseFloat(stats.tokenSavings) > 0 ? 'Tokens saved' :
-                   parseFloat(stats.tokenSavings) < 0 ? 'Token overhead' : 'No change'}
+                   parseFloat(stats.tokenSavings) < 0 ? 'Token overhead' : 'No optimization needed'}
                 </div>
               </div>
             </div>
@@ -573,17 +573,21 @@ export default function App() {
             </div>
             
             {/* Status Message */}
-            {parseFloat(stats.tokenSavings) !== 0 && (
+            {input.trim() && output && !error && (
               <div className={`mt-4 p-3 rounded-lg border-l-4 ${
                 parseFloat(stats.tokenSavings) > 0 ? 
                 (isDark ? 'bg-green-900/20 border-green-500 text-green-200' : 'bg-green-50 border-green-500 text-green-800') :
-                (isDark ? 'bg-red-900/20 border-red-500 text-red-200' : 'bg-red-50 border-red-500 text-red-800')
+                parseFloat(stats.tokenSavings) < 0 ?
+                (isDark ? 'bg-red-900/20 border-red-500 text-red-200' : 'bg-red-50 border-red-500 text-red-800') :
+                (isDark ? 'bg-blue-900/20 border-blue-500 text-blue-200' : 'bg-blue-50 border-blue-500 text-blue-800')
               }`}>
                 <p className="text-sm font-medium">
                   {parseFloat(stats.tokenSavings) > 0 ? (
                     `✅ Successfully compressed! You'll save ${Math.abs(parseFloat(stats.tokenSavings))}% on LLM API costs.`
-                  ) : (
+                  ) : parseFloat(stats.tokenSavings) < 0 ? (
                     `⚠️ Compression increased size by ${Math.abs(parseFloat(stats.tokenSavings))}%. Original data may already be optimized.`
+                  ) : (
+                    `ℹ️ No optimization needed. The JSON is already small or optimally structured for token usage.`
                   )}
                 </p>
               </div>
