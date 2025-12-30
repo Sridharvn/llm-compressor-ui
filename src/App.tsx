@@ -19,6 +19,7 @@ import {
   Download
 } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
+import { useDocumentation } from './hooks/useDocumentation';
 
 const SAMPLE_JSON = {
   "metadata": {
@@ -96,6 +97,9 @@ type Options = {
 };
 
 export default function App() {
+  // Documentation
+  const { data: docData, status: docStatus } = useDocumentation();
+
   // State
   const [input, setInput] = useState(() => {
     const saved = localStorage.getItem('llm-compressor-input');
@@ -306,7 +310,13 @@ export default function App() {
             </div>
             <div>
               <h1 className="font-bold text-base tracking-tight">LLM Compressor</h1>
-              <p className={`text-[10px] ${isDark ? 'text-gray-500' : 'text-gray-600'}`}>llm-chat-msg-compressor</p>
+              <div className="flex items-center gap-2">
+                <p className={`text-[10px] ${isDark ? 'text-gray-500' : 'text-gray-600'}`}>{docData.title}</p>
+                <div 
+                  className={`status-indicator ${docStatus.isLive ? 'live' : 'fallback'}`}
+                  title={docStatus.isLive ? `Live data from NPM (last fetched: ${docStatus.lastFetched?.toLocaleString()})` : `Fallback data ${docStatus.error ? `(${docStatus.error})` : ''}`}
+                />
+              </div>
             </div>
           </div>
 
@@ -524,6 +534,7 @@ export default function App() {
               <div className={`flex items-center gap-2 p-0.5 rounded-lg border ${isDark ? 'bg-gray-800 border-gray-600' : 'bg-gray-100 border-gray-300'}`}>
                 <label className={`flex items-center gap-1.5 cursor-pointer group px-2 py-1 rounded-md transition-all ${isDark ? 'hover:bg-gray-700' : 'hover:bg-white hover:shadow-sm'}`}>
                   <input 
+                    id="aggressive-checkbox"
                     type="checkbox" 
                     checked={options.aggressive}
                     onChange={(e) => setOptions({ ...options, aggressive: e.target.checked })}
@@ -533,6 +544,7 @@ export default function App() {
                 </label>
                 <label className={`flex items-center gap-1.5 cursor-pointer group px-2 py-1 rounded-md transition-all ${isDark ? 'hover:bg-gray-700' : 'hover:bg-white hover:shadow-sm'}`}>
                   <input 
+                    id="unsafe-checkbox"
                     type="checkbox" 
                     checked={options.unsafe}
                     onChange={(e) => setOptions({ ...options, unsafe: e.target.checked })}
@@ -581,6 +593,7 @@ export default function App() {
                   highlight={code => highlight(code, languages.json, 'json')}
                   padding={20}
                   className="min-h-full focus:outline-none"
+                  textareaId="input-json-editor"
                   style={{
                     fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
                     fontSize: 13,
@@ -641,6 +654,7 @@ export default function App() {
                   padding={20}
                   readOnly
                   className="min-h-full"
+                  textareaId="output-json-editor"
                   style={{
                     fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
                     fontSize: 13,
@@ -669,17 +683,110 @@ export default function App() {
                     <Zap className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold tracking-tight">llm-chat-msg-compressor</h2>
+                    <h2 className="text-2xl font-bold tracking-tight">{docData.title}</h2>
                     <div className="flex items-center gap-2 mt-1">
-                      <img src="https://img.shields.io/npm/v/llm-chat-msg-compressor.svg" alt="NPM Version" className="h-4" />
-                      <img src="https://img.shields.io/npm/l/llm-chat-msg-compressor.svg" alt="License" className="h-4" />
-                      <img src="https://github.com/Sridharvn/llm-chat-msg-compressor/actions/workflows/test.yml/badge.svg" alt="Build Status" className="h-4" />
+                      <img src={docData.badges.npm} alt="NPM Version" className="h-4" />
+                      <img src={docData.badges.license} alt="License" className="h-4" />
+                      <img src={docData.badges.build} alt="Build Status" className="h-4" />
                     </div>
                   </div>
                 </div>
                 <p className={`text-lg ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  Intelligent JSON optimizer for LLM APIs. Automatically reduces token usage by selecting the best compression strategy for your data payload.
+                  {docData.description}
                 </p>
+              </div>
+
+              {/* Package Metadata */}
+              <div>
+                <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                  <span className="text-2xl">📊</span>
+                  Package Info
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className={`p-3 rounded-lg border ${isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-100/50 border-gray-200'}`}>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-sm">📦</span>
+                      <span className={`text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Version</span>
+                    </div>
+                    <div className="font-mono text-lg font-semibold text-blue-600 dark:text-blue-400">
+                      v{docData.metadata.version}
+                    </div>
+                  </div>
+                  
+                  <div className={`p-3 rounded-lg border ${isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-100/50 border-gray-200'}`}>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-sm">⚖️</span>
+                      <span className={`text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>License</span>
+                    </div>
+                    <div className="font-semibold text-green-600 dark:text-green-400">
+                      {docData.metadata.license}
+                    </div>
+                  </div>
+                  
+                  {docData.metadata.downloads && (
+                    <div className={`p-3 rounded-lg border ${isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-100/50 border-gray-200'}`}>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-sm">📈</span>
+                        <span className={`text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Weekly Downloads</span>
+                      </div>
+                      <div className="font-semibold text-purple-600 dark:text-purple-400">
+                        {docData.metadata.downloads.weekly.toLocaleString()}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {docData.metadata.size && (
+                    <div className={`p-3 rounded-lg border ${isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-100/50 border-gray-200'}`}>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-sm">💾</span>
+                        <span className={`text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Package Size</span>
+                      </div>
+                      <div className="font-semibold text-orange-600 dark:text-orange-400">
+                        {docData.metadata.size}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                
+                {/* Links */}
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <a 
+                    href={docData.metadata.homepage} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border transition-colors ${
+                      isDark 
+                        ? 'border-gray-700 bg-gray-800 text-gray-300 hover:border-blue-600 hover:text-blue-400' 
+                        : 'border-gray-300 bg-white text-gray-700 hover:border-blue-500 hover:text-blue-600'
+                    }`}
+                  >
+                    <span>🏠</span> Homepage
+                  </a>
+                  <a 
+                    href={docData.metadata.repository.url.replace('git+', '').replace('.git', '')} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border transition-colors ${
+                      isDark 
+                        ? 'border-gray-700 bg-gray-800 text-gray-300 hover:border-green-600 hover:text-green-400' 
+                        : 'border-gray-300 bg-white text-gray-700 hover:border-green-500 hover:text-green-600'
+                    }`}
+                  >
+                    <span>📁</span> Repository
+                  </a>
+                  <a 
+                    href={`https://www.npmjs.com/package/llm-chat-msg-compressor`} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border transition-colors ${
+                      isDark 
+                        ? 'border-gray-700 bg-gray-800 text-gray-300 hover:border-red-600 hover:text-red-400' 
+                        : 'border-gray-300 bg-white text-gray-700 hover:border-red-500 hover:text-red-600'
+                    }`}
+                  >
+                    <span>📦</span> NPM Package
+                  </a>
+                </div>
               </div>
 
               <div>
@@ -688,41 +795,15 @@ export default function App() {
                   Features
                 </h3>
                 <div className="space-y-3">
-                  <div className="flex items-start gap-3">
-                    <span className="text-lg">🧠</span>
-                    <div>
-                      <p className="font-semibold">Intelligent</p>
-                      <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Analyzes payload structure to pick the best strategy</p>
+                  {docData.sections.features.map((feature, index) => (
+                    <div key={index} className="flex items-start gap-3">
+                      <span className="text-lg">{feature.icon}</span>
+                      <div>
+                        <p className="font-semibold">{feature.title}</p>
+                        <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{feature.description}</p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span className="text-lg">⚡</span>
-                    <div>
-                      <p className="font-semibold">High Performance</p>
-                      <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Optimized for low-latency with single-pass analysis and zero production dependencies</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span className="text-lg">📉</span>
-                    <div>
-                      <p className="font-semibold">Efficient</p>
-                      <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Saves 10-40% input tokens on average</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span className="text-lg">✅</span>
-                    <div>
-                      <p className="font-semibold">Safe</p>
-                      <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Full restoration of original data (semantic equality)</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span className="text-lg">🔌</span>
-                    <div>
-                      <p className="font-semibold">Easy</p>
-                      <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Simple optimize() and restore() API</p>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -736,7 +817,7 @@ export default function App() {
                 </h3>
                 <div className={`p-4 rounded-lg border ${isDark ? 'bg-gray-900 border-gray-700' : 'bg-gray-100 border-gray-200'}`}>
                   <code className={`font-mono text-sm ${isDark ? 'text-green-400' : 'text-green-700'}`}>
-                    npm install llm-chat-msg-compressor
+                    {docData.sections.installation.command}
                   </code>
                 </div>
               </div>
@@ -748,28 +829,7 @@ export default function App() {
                 </h3>
                 <div className={`p-4 rounded-lg border ${isDark ? 'bg-gray-900 border-gray-700' : 'bg-gray-100 border-gray-200'} overflow-x-auto`}>
                   <pre className={`font-mono text-xs ${isDark ? 'text-gray-300' : 'text-gray-700'} leading-relaxed`}>
-{`import { optimize, restore } from "llm-chat-msg-compressor";
-import OpenAI from "openai";
-
-const data = {
-  users: [
-    { id: 1, name: "Alice", role: "admin" },
-    { id: 2, name: "Bob", role: "viewer" },
-    // ... 100 more users
-  ],
-};
-
-// 1. Optimize before sending to LLM
-const optimizedData = optimize(data);
-
-// 2. Send to LLM
-const completion = await openai.chat.completions.create({
-  messages: [{ role: "user", content: JSON.stringify(optimizedData) }],
-  model: "gpt-4",
-});
-
-// 3. (Optional) Restore if you need to process response in same format
-// const original = restore(responseFromLLM);`}
+{docData.sections.usage.code}
                   </pre>
                 </div>
               </div>
@@ -787,30 +847,24 @@ const completion = await openai.chat.completions.create({
                 The library <strong>automatically selects</strong> the best strategy using a smart scoring algorithm:
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className={`p-6 rounded-lg border ${isDark ? 'bg-gray-900/50 border-gray-700' : 'bg-white border-gray-200 shadow-sm'}`}>
-                  <h4 className="font-bold text-lg mb-2 text-blue-600 dark:text-blue-400">1. Minify</h4>
-                  <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Standard JSON serialization for small payloads &lt; 500 bytes
-                  </p>
-                </div>
-                <div className={`p-6 rounded-lg border ${isDark ? 'bg-gray-900/50 border-gray-700' : 'bg-white border-gray-200 shadow-sm'}`}>
-                  <h4 className="font-bold text-lg mb-2 text-purple-600 dark:text-purple-400">2. Schema Separation</h4>
-                  <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Separates keys from values - best for lists of uniform objects
-                  </p>
-                </div>
-                <div className={`p-6 rounded-lg border ${isDark ? 'bg-gray-900/50 border-gray-700' : 'bg-white border-gray-200 shadow-sm'}`}>
-                  <h4 className="font-bold text-lg mb-2 text-green-600 dark:text-green-400">3. Abbreviated Keys</h4>
-                  <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Shortens keys - best for mixed or nested payloads
-                  </p>
-                </div>
-                <div className={`p-6 rounded-lg border ${isDark ? 'bg-gray-900/50 border-gray-700' : 'bg-white border-gray-200 shadow-sm'}`}>
-                  <h4 className="font-bold text-lg mb-2 text-red-600 dark:text-red-400">4. Ultra Compact</h4>
-                  <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Aggressive compression (enabled with aggressive: true)
-                  </p>
-                </div>
+                {docData.sections.strategies.map((strategy, index) => {
+                  const colorMap: Record<string, string> = {
+                    blue: 'text-blue-600 dark:text-blue-400',
+                    purple: 'text-purple-600 dark:text-purple-400',
+                    green: 'text-green-600 dark:text-green-400',
+                    orange: 'text-orange-600 dark:text-orange-400',
+                  };
+                  const colorClass = colorMap[strategy.color] || 'text-gray-600 dark:text-gray-400';
+                  
+                  return (
+                    <div key={index} className={`p-6 rounded-lg border ${isDark ? 'bg-gray-900/50 border-gray-700' : 'bg-white border-gray-200 shadow-sm'}`}>
+                      <h4 className={`font-bold text-lg mb-2 ${colorClass}`}>{strategy.icon} {strategy.title}</h4>
+                      <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        {strategy.description}
+                      </p>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
@@ -821,11 +875,7 @@ const completion = await openai.chat.completions.create({
               </h3>
               <div className={`p-6 rounded-lg border ${isDark ? 'bg-gray-900 border-gray-700' : 'bg-gray-100 border-gray-200'}`}>
                 <pre className={`font-mono text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'} leading-relaxed`}>
-{`optimize(data, {
-  aggressive: false, // Enable UltraCompact strategy (default: false)
-  unsafe: false,     // Implement lossy optimizations like bool->int (default: false)  
-  thresholdBytes: 500, // Minimum size to attempt compression (default: 500)
-});`}
+{docData.sections.options.code}
                 </pre>
               </div>
             </div>
@@ -833,14 +883,11 @@ const completion = await openai.chat.completions.create({
             <div>
               <h3 className="text-2xl font-bold mb-6 flex items-center gap-3">
                 <span className="text-3xl">🔒</span>
-                Safety & Types
+                {docData.sections.safety.title}
               </h3>
               <div className={`p-6 rounded-lg border-l-4 border-blue-500 ${isDark ? 'bg-blue-950/20 border-blue-400' : 'bg-blue-50 border-blue-500'}`}>
-                <p className={`${isDark ? 'text-blue-200' : 'text-blue-800'} mb-4`}>
-                  <strong>Safe-by-Default:</strong> The library preserves all data types (including booleans), ensuring that downstream code works without modification.
-                </p>
-                <p className={`${isDark ? 'text-blue-300' : 'text-blue-700'} text-sm`}>
-                  For maximum compression where your LLM can handle <code className={`px-1 py-0.5 rounded text-xs ${isDark ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-800'}`}>1</code>/<code className={`px-1 py-0.5 rounded text-xs ${isDark ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-800'}`}>0</code> instead of <code className={`px-1 py-0.5 rounded text-xs ${isDark ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-800'}`}>true</code>/<code className={`px-1 py-0.5 rounded text-xs ${isDark ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-800'}`}>false</code>, enable <code className={`px-1 py-0.5 rounded text-xs ${isDark ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-800'}`}>unsafe: true</code>.
+                <p className={`${isDark ? 'text-blue-200' : 'text-blue-800'}`}>
+                  {docData.sections.safety.content}
                 </p>
               </div>
             </div>
@@ -854,24 +901,23 @@ const completion = await openai.chat.completions.create({
                 Designed for high-throughput environments:
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
-                  <h4 className="font-semibold mb-2 text-blue-600 dark:text-blue-400">Zero-Stringify Analysis</h4>
-                  <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Estimates payload size during traversal to avoid memory spikes
-                  </p>
-                </div>
-                <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
-                  <h4 className="font-semibold mb-2 text-green-600 dark:text-green-400">Lazy Detection</h4>
-                  <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Auto-detects strategies using targeted marker searches
-                  </p>
-                </div>
-                <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
-                  <h4 className="font-semibold mb-2 text-purple-600 dark:text-purple-400">Memory Efficient</h4>
-                  <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Optimized loops and reused strategy instances
-                  </p>
-                </div>
+                {docData.sections.performance.map((feature, index) => {
+                  const colorMap: Record<string, string> = {
+                    '⚡': 'text-blue-600 dark:text-blue-400',
+                    '🎯': 'text-green-600 dark:text-green-400',
+                    '📊': 'text-purple-600 dark:text-purple-400',
+                  };
+                  const colorClass = colorMap[feature.icon] || 'text-gray-600 dark:text-gray-400';
+                  
+                  return (
+                    <div key={index} className={`p-4 rounded-lg ${isDark ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
+                      <h4 className={`font-semibold mb-2 ${colorClass}`}>{feature.title}</h4>
+                      <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        {feature.description}
+                      </p>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
