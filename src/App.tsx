@@ -294,7 +294,7 @@ export default function App() {
   };
 
   return (
-    <div className={`h-screen flex flex-col overflow-hidden transition-colors duration-300 ${isDark ? 'bg-gray-950 text-gray-100' : 'bg-gray-50 text-gray-900'}`}>
+    <div className={`min-h-screen flex flex-col transition-colors duration-300 ${isDark ? 'bg-gray-950 text-gray-100' : 'bg-gray-50 text-gray-900'}`}>
       <Toaster position="bottom-right" />
       
       {/* Header */}
@@ -311,6 +311,17 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-2">
+            <a 
+              href="https://www.npmjs.com/package/llm-chat-msg-compressor" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className={`p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors`}
+              title="View on NPM"
+            >
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M0 0v24h6.75V6.75H9V24h15V0H0zm6.75 3H21v18H15V9.75h-2.25V21H3V3h3.75z"/>
+              </svg>
+            </a>
             <a 
               href="https://github.com/Sridharvn/llm-chat-msg-compressor" 
               target="_blank" 
@@ -386,8 +397,8 @@ export default function App() {
       </div>
 
       {/* Main Content - 2 Pane Layout */}
-      <main className="flex-1 flex flex-col min-h-0 p-2 md:p-4">
-        <div className="flex-1 flex flex-col md:flex-row gap-2 md:gap-4 min-h-0 max-w-[1600px] mx-auto w-full">
+      <main className="flex-1 flex flex-col min-h-[60vh] p-2 md:p-4">
+        <div className="flex-1 flex flex-col md:flex-row gap-2 md:gap-4 min-h-[50vh] max-w-[1600px] mx-auto w-full">
           
           {/* Input Pane */}
           <div className={`flex-1 flex flex-col rounded-xl border overflow-hidden ${isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-200 shadow-lg'}`}>
@@ -487,13 +498,234 @@ export default function App() {
         </div>
       </main>
 
+      {/* Documentation Section */}
+      <div className={`border-t ${isDark ? 'border-gray-800 bg-gray-950/50' : 'border-gray-200 bg-gray-50/50'}`}>
+        <div className="max-w-[1600px] mx-auto px-4 py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            
+            {/* Introduction & Features */}
+            <div className="space-y-8">
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-2 rounded-lg">
+                    <Zap className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold tracking-tight">llm-chat-msg-compressor</h2>
+                    <div className="flex items-center gap-2 mt-1">
+                      <img src="https://img.shields.io/npm/v/llm-chat-msg-compressor.svg" alt="NPM Version" className="h-4" />
+                      <img src="https://img.shields.io/npm/l/llm-chat-msg-compressor.svg" alt="License" className="h-4" />
+                      <img src="https://github.com/Sridharvn/llm-chat-msg-compressor/actions/workflows/test.yml/badge.svg" alt="Build Status" className="h-4" />
+                    </div>
+                  </div>
+                </div>
+                <p className={`text-lg ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  Intelligent JSON optimizer for LLM APIs. Automatically reduces token usage by selecting the best compression strategy for your data payload.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                  <span className="text-2xl">✨</span>
+                  Features
+                </h3>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3">
+                    <span className="text-lg">🧠</span>
+                    <div>
+                      <p className="font-semibold">Intelligent</p>
+                      <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Analyzes payload structure to pick the best strategy</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="text-lg">⚡</span>
+                    <div>
+                      <p className="font-semibold">High Performance</p>
+                      <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Optimized for low-latency with single-pass analysis and zero production dependencies</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="text-lg">📉</span>
+                    <div>
+                      <p className="font-semibold">Efficient</p>
+                      <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Saves 10-40% input tokens on average</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="text-lg">✅</span>
+                    <div>
+                      <p className="font-semibold">Safe</p>
+                      <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Full restoration of original data (semantic equality)</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="text-lg">🔌</span>
+                    <div>
+                      <p className="font-semibold">Easy</p>
+                      <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Simple optimize() and restore() API</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Installation & Usage */}
+            <div className="space-y-8">
+              <div>
+                <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                  <span className="text-2xl">📦</span>
+                  Installation
+                </h3>
+                <div className={`p-4 rounded-lg border ${isDark ? 'bg-gray-900 border-gray-700' : 'bg-gray-100 border-gray-200'}`}>
+                  <code className={`font-mono text-sm ${isDark ? 'text-green-400' : 'text-green-700'}`}>
+                    npm install llm-chat-msg-compressor
+                  </code>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                  <span className="text-2xl">🚀</span>
+                  Usage
+                </h3>
+                <div className={`p-4 rounded-lg border ${isDark ? 'bg-gray-900 border-gray-700' : 'bg-gray-100 border-gray-200'} overflow-x-auto`}>
+                  <pre className={`font-mono text-xs ${isDark ? 'text-gray-300' : 'text-gray-700'} leading-relaxed`}>
+{`import { optimize, restore } from "llm-chat-msg-compressor";
+import OpenAI from "openai";
+
+const data = {
+  users: [
+    { id: 1, name: "Alice", role: "admin" },
+    { id: 2, name: "Bob", role: "viewer" },
+    // ... 100 more users
+  ],
+};
+
+// 1. Optimize before sending to LLM
+const optimizedData = optimize(data);
+
+// 2. Send to LLM
+const completion = await openai.chat.completions.create({
+  messages: [{ role: "user", content: JSON.stringify(optimizedData) }],
+  model: "gpt-4",
+});
+
+// 3. (Optional) Restore if you need to process response in same format
+// const original = restore(responseFromLLM);`}
+                  </pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Strategies & Options */}
+          <div className="mt-16 space-y-12">
+            <div>
+              <h3 className="text-2xl font-bold mb-6 flex items-center gap-3">
+                <span className="text-3xl">🎯</span>
+                Compression Strategies
+              </h3>
+              <p className={`mb-6 text-lg ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                The library <strong>automatically selects</strong> the best strategy using a smart scoring algorithm:
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className={`p-6 rounded-lg border ${isDark ? 'bg-gray-900/50 border-gray-700' : 'bg-white border-gray-200 shadow-sm'}`}>
+                  <h4 className="font-bold text-lg mb-2 text-blue-600 dark:text-blue-400">1. Minify</h4>
+                  <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    Standard JSON serialization for small payloads &lt; 500 bytes
+                  </p>
+                </div>
+                <div className={`p-6 rounded-lg border ${isDark ? 'bg-gray-900/50 border-gray-700' : 'bg-white border-gray-200 shadow-sm'}`}>
+                  <h4 className="font-bold text-lg mb-2 text-purple-600 dark:text-purple-400">2. Schema Separation</h4>
+                  <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    Separates keys from values - best for lists of uniform objects
+                  </p>
+                </div>
+                <div className={`p-6 rounded-lg border ${isDark ? 'bg-gray-900/50 border-gray-700' : 'bg-white border-gray-200 shadow-sm'}`}>
+                  <h4 className="font-bold text-lg mb-2 text-green-600 dark:text-green-400">3. Abbreviated Keys</h4>
+                  <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    Shortens keys - best for mixed or nested payloads
+                  </p>
+                </div>
+                <div className={`p-6 rounded-lg border ${isDark ? 'bg-gray-900/50 border-gray-700' : 'bg-white border-gray-200 shadow-sm'}`}>
+                  <h4 className="font-bold text-lg mb-2 text-red-600 dark:text-red-400">4. Ultra Compact</h4>
+                  <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    Aggressive compression (enabled with aggressive: true)
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-2xl font-bold mb-6 flex items-center gap-3">
+                <span className="text-3xl">⚙️</span>
+                Configuration Options
+              </h3>
+              <div className={`p-6 rounded-lg border ${isDark ? 'bg-gray-900 border-gray-700' : 'bg-gray-100 border-gray-200'}`}>
+                <pre className={`font-mono text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'} leading-relaxed`}>
+{`optimize(data, {
+  aggressive: false, // Enable UltraCompact strategy (default: false)
+  unsafe: false,     // Implement lossy optimizations like bool->int (default: false)  
+  thresholdBytes: 500, // Minimum size to attempt compression (default: 500)
+});`}
+                </pre>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-2xl font-bold mb-6 flex items-center gap-3">
+                <span className="text-3xl">🔒</span>
+                Safety & Types
+              </h3>
+              <div className={`p-6 rounded-lg border-l-4 border-blue-500 ${isDark ? 'bg-blue-950/20 border-blue-400' : 'bg-blue-50 border-blue-500'}`}>
+                <p className={`${isDark ? 'text-blue-200' : 'text-blue-800'} mb-4`}>
+                  <strong>Safe-by-Default:</strong> The library preserves all data types (including booleans), ensuring that downstream code works without modification.
+                </p>
+                <p className={`${isDark ? 'text-blue-300' : 'text-blue-700'} text-sm`}>
+                  For maximum compression where your LLM can handle <code className={`px-1 py-0.5 rounded text-xs ${isDark ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-800'}`}>1</code>/<code className={`px-1 py-0.5 rounded text-xs ${isDark ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-800'}`}>0</code> instead of <code className={`px-1 py-0.5 rounded text-xs ${isDark ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-800'}`}>true</code>/<code className={`px-1 py-0.5 rounded text-xs ${isDark ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-800'}`}>false</code>, enable <code className={`px-1 py-0.5 rounded text-xs ${isDark ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-800'}`}>unsafe: true</code>.
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-2xl font-bold mb-6 flex items-center gap-3">
+                <span className="text-3xl">⚡</span>
+                Performance
+              </h3>
+              <p className={`mb-4 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                Designed for high-throughput environments:
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
+                  <h4 className="font-semibold mb-2 text-blue-600 dark:text-blue-400">Zero-Stringify Analysis</h4>
+                  <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    Estimates payload size during traversal to avoid memory spikes
+                  </p>
+                </div>
+                <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
+                  <h4 className="font-semibold mb-2 text-green-600 dark:text-green-400">Lazy Detection</h4>
+                  <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    Auto-detects strategies using targeted marker searches
+                  </p>
+                </div>
+                <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
+                  <h4 className="font-semibold mb-2 text-purple-600 dark:text-purple-400">Memory Efficient</h4>
+                  <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    Optimized loops and reused strategy instances
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Footer */}
       <footer className={`shrink-0 py-2 px-4 border-t ${isDark ? 'border-gray-800 text-gray-500' : 'border-gray-200 text-gray-400'}`}>
         <div className="max-w-[1600px] mx-auto flex items-center justify-between text-[10px]">
           <p>© 2025 LLM Compressor</p>
           <div className="flex items-center gap-4">
-            <a href="https://www.npmjs.com/package/llm-chat-msg-compressor" target="_blank" rel="noopener" className="hover:text-blue-500">NPM</a>
-            <a href="https://github.com/Sridharvn/llm-chat-msg-compressor" target="_blank" rel="noopener" className="hover:text-blue-500">Docs</a>
+            <a href="https://github.com/Sridharvn/llm-chat-msg-compressor" target="_blank" rel="noopener" className="hover:text-blue-500">Documentation</a>
           </div>
         </div>
       </footer>
