@@ -334,3 +334,44 @@ html:not(.dark) .token.variable {
   border: 1px solid currentColor;
   opacity: 0.2;
 }
+
+/* Editor Line Numbers and Error Highlighting */
+.editor-container {
+  display: flex;
+  min-height: 100%;
+}
+
+.line-numbers {
+  padding: 20px 12px;
+  text-align: right;
+  user-select: none;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  border-right: 1px solid;
+  min-width: 45px;
+}
+
+.dark .line-numbers {
+  background-color: #0f172a;
+  color: #475569;
+  border-color: #1e293b;
+}
+
+html:not(.dark) .line-numbers {
+  background-color: #f8fafc;
+  color: #94a3b8;
+  border-color: #e2e8f0;
+}
+
+.line-number-error {
+  color: #ef4444 !important;
+  font-weight: bold;
+}
+
+.error-line-highlight {
+  text-decoration: underline wavy #ef4444;
+  background-color: rgba(239, 68, 68, 0.1);
+  display: inline-block;
+  width: 100%;
+}

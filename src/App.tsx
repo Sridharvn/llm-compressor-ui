@@ -227,6 +227,36 @@ export default function App() {
       toast.error('Cannot format: Invalid JSON');
     }
   };
+
+  const handlePaste = (e: React.ClipboardEvent) => {
+    const pastedText = e.clipboardData.getData('text');
+    try {
+      // Check if the pasted text itself is valid JSON
+      JSON.parse(pastedText);
+      
+      // If it is, we'll format the whole input after it's updated
+      setTimeout(() => {
+        setInput(prev => {
+          try {
+            const parsed = JSON.parse(prev);
+            return JSON.stringify(parsed, null, 2);
+          } catch {
+            return prev;
+          }
+        });
+        toast.success('Pasted JSON Formatted', {
+          id: 'paste-format',
+          style: {
+            background: isDark ? '#1f2937' : '#fff',
+            color: isDark ? '#fff' : '#1f2937',
+          },
+        });
+      }, 0);
+    } catch (e) {
+      // Not valid JSON, just let the default paste happen
+    }
+  };
+
   const handleCopy = async () => {
     const textToCopy = outputMode === 'optimized' ? output : restored;
     if (!textToCopy) return;
@@ -347,6 +377,32 @@ export default function App() {
   const handleLoadLargeSample = () => {
     setInput(JSON.stringify(LARGE_SAMPLE_JSON, null, 2));
     toast.success('Large sample data loaded');
+  };
+
+  const highlightWithErrors = (code: string, errorLine?: number) => {
+    const highlighted = highlight(code, languages.json, 'json');
+    if (!errorLine) return highlighted;
+
+    const lines = highlighted.split('\n');
+    return lines.map((line, i) => {
+      if (i + 1 === errorLine) {
+        return `<span class="error-line-highlight">${line}</span>`;
+      }
+      return line;
+    }).join('\n');
+  };
+
+  const renderLineNumbers = (content: string, errorLine?: number) => {
+    const lines = content.split('\n');
+    return (
+      <div className="line-numbers">
+        {lines.map((_, i) => (
+          <div key={i} className={errorLine === i + 1 ? 'line-number-error' : ''}>
+            {i + 1}
+          </div>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -656,21 +712,25 @@ export default function App() {
             </div>
             <div className="flex-1 overflow-hidden relative bg-gray-50 dark:bg-gray-900">
               <div className="absolute inset-0 overflow-auto custom-scrollbar">
-                <Editor
-                  value={input}
-                  onValueChange={code => setInput(code)}
-                  highlight={code => highlight(code, languages.json, 'json')}
-                  padding={20}
-                  className="min-h-full focus:outline-none"
-                  textareaId="input-json-editor"
-                  style={{
-                    fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-                    fontSize: 13,
-                    lineHeight: '1.5',
-                    backgroundColor: isDark ? '#111827' : '#f9fafb',
-                    color: isDark ? '#e5e7eb' : '#374151',
-                  }}
-                />
+                <div className="editor-container">
+                  {renderLineNumbers(input, error?.line)}
+                  <Editor
+                    value={input}
+                    onValueChange={code => setInput(code)}
+                    onPaste={handlePaste}
+                    highlight={code => highlightWithErrors(code, error?.line)}
+                    padding={20}
+                    className="flex-1 focus:outline-none"
+                    textareaId="input-json-editor"
+                    style={{
+                      fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                      fontSize: 13,
+                      lineHeight: '1.5',
+                      backgroundColor: 'transparent',
+                      color: isDark ? '#e5e7eb' : '#374151',
+                    }}
+                  />
+                </div>
               </div>
               {error && (
                 <div className="absolute bottom-4 left-4 right-4 bg-red-500/10 border border-red-500/50 text-red-500 p-3 rounded-lg backdrop-blur-md flex items-start gap-3 z-20 shadow-xl animate-in fade-in slide-in-from-bottom-2">
@@ -716,22 +776,25 @@ export default function App() {
             </div>
             <div className="flex-1 overflow-hidden relative bg-gray-50 dark:bg-gray-900">
               <div className="absolute inset-0 overflow-auto custom-scrollbar">
-                <Editor
-                  value={outputMode === 'optimized' ? output : restored}
-                  onValueChange={() => {}}
-                  highlight={code => highlight(code, languages.json, 'json')}
-                  padding={20}
-                  readOnly
-                  className="min-h-full"
-                  textareaId="output-json-editor"
-                  style={{
-                    fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-                    fontSize: 13,
-                    lineHeight: '1.5',
-                    backgroundColor: isDark ? '#111827' : '#f9fafb',
-                    color: isDark ? '#d1d5db' : '#4b5563',
-                  }}
-                />
+                <div className="editor-container">
+                  {renderLineNumbers(outputMode === 'optimized' ? output : restored)}
+                  <Editor
+                    value={outputMode === 'optimized' ? output : restored}
+                    onValueChange={() => {}}
+                    highlight={code => highlight(code, languages.json, 'json')}
+                    padding={20}
+                    readOnly
+                    className="flex-1"
+                    textareaId="output-json-editor"
+                    style={{
+                      fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                      fontSize: 13,
+                      lineHeight: '1.5',
+                      backgroundColor: 'transparent',
+                      color: isDark ? '#d1d5db' : '#4b5563',
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </div>
