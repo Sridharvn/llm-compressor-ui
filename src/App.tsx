@@ -8,6 +8,7 @@ import 'prismjs/themes/prism-tomorrow.css';
 import { 
   Zap, 
   Copy, 
+  Check,
   Trash2, 
   CheckCircle2, 
   AlertCircle, 
@@ -119,6 +120,7 @@ export default function App() {
   // @ts-expect-error - activeTab and setActiveTab are planned for mobile tab implementation
   const [activeTab, setActiveTab] = useState<'input' | 'output'>('input');
   const [error, setError] = useState<{ message: string; line?: number } | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   // Persistence
   useEffect(() => {
@@ -225,8 +227,56 @@ export default function App() {
   };
   const handleCopy = async () => {
     const textToCopy = outputMode === 'optimized' ? output : restored;
+    if (!textToCopy) return;
+    
     try {
-      await navigator.clipboard.writeText(textToCopy);
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(textToCopy);
+      } else {
+        const textArea = document.createElement("textarea");
+        textArea.value = textToCopy;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-9999px";
+        textArea.style.top = "-9999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+      }
+      
+      toast.success('Copied to clipboard!', {
+        style: {
+          background: isDark ? '#1f2937' : '#fff',
+          color: isDark ? '#fff' : '#1f2937',
+        },
+      });
+    } catch {
+      toast.error('Failed to copy');
+    }
+  };
+
+  const handleCopySection = async (id: string, text: string) => {
+    if (!text) return;
+    
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-9999px";
+        textArea.style.top = "-9999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+      }
+      
+      setCopiedId(id);
+      setTimeout(() => setCopiedId(null), 2000);
       toast.success('Copied to clipboard!', {
         style: {
           background: isDark ? '#1f2937' : '#fff',
@@ -815,10 +865,21 @@ export default function App() {
                   <span className="text-2xl">📦</span>
                   Installation
                 </h3>
-                <div className={`p-4 rounded-lg border ${isDark ? 'bg-gray-900 border-gray-700' : 'bg-gray-100 border-gray-200'}`}>
-                  <code className={`font-mono text-sm ${isDark ? 'text-green-400' : 'text-green-700'}`}>
-                    {docData.sections.installation.command}
-                  </code>
+                <div className="group relative">
+                  <button
+                    onClick={() => handleCopySection('installation', docData.sections.installation.command)}
+                    className={`absolute top-3 right-3 p-1.5 rounded-md transition-all opacity-100 md:opacity-0 group-hover:opacity-100 z-20 ${
+                      isDark ? 'bg-gray-800 hover:bg-gray-700 text-gray-400' : 'bg-white hover:bg-gray-50 text-gray-500 shadow-sm border'
+                    }`}
+                    title="Copy command"
+                  >
+                    {copiedId === 'installation' ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                  </button>
+                  <div className={`p-4 rounded-lg border ${isDark ? 'bg-gray-900 border-gray-700' : 'bg-gray-100 border-gray-200'}`}>
+                    <code className={`font-mono text-sm ${isDark ? 'text-green-400' : 'text-green-700'}`}>
+                      {docData.sections.installation.command}
+                    </code>
+                  </div>
                 </div>
               </div>
 
@@ -827,10 +888,21 @@ export default function App() {
                   <span className="text-2xl">🚀</span>
                   Usage
                 </h3>
-                <div className={`p-4 rounded-lg border ${isDark ? 'bg-gray-900 border-gray-700' : 'bg-gray-100 border-gray-200'} overflow-x-auto`}>
-                  <pre className={`font-mono text-xs ${isDark ? 'text-gray-300' : 'text-gray-700'} leading-relaxed`}>
+                <div className="group relative">
+                  <button
+                    onClick={() => handleCopySection('usage', docData.sections.usage.code)}
+                    className={`absolute top-3 right-3 p-1.5 rounded-md transition-all opacity-100 md:opacity-0 group-hover:opacity-100 z-20 ${
+                      isDark ? 'bg-gray-800 hover:bg-gray-700 text-gray-400' : 'bg-white hover:bg-gray-50 text-gray-500 shadow-sm border'
+                    }`}
+                    title="Copy code"
+                  >
+                    {copiedId === 'usage' ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                  </button>
+                  <div className={`p-4 rounded-lg border ${isDark ? 'bg-gray-900 border-gray-700' : 'bg-gray-100 border-gray-200'} overflow-x-auto`}>
+                    <pre className={`font-mono text-xs ${isDark ? 'text-gray-300' : 'text-gray-700'} leading-relaxed`}>
 {docData.sections.usage.code}
-                  </pre>
+                    </pre>
+                  </div>
                 </div>
               </div>
             </div>
@@ -873,10 +945,21 @@ export default function App() {
                 <span className="text-3xl">⚙️</span>
                 Configuration Options
               </h3>
-              <div className={`p-6 rounded-lg border ${isDark ? 'bg-gray-900 border-gray-700' : 'bg-gray-100 border-gray-200'}`}>
-                <pre className={`font-mono text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'} leading-relaxed`}>
+              <div className="group relative">
+                <button
+                  onClick={() => handleCopySection('options', docData.sections.options.code)}
+                  className={`absolute top-3 right-3 p-1.5 rounded-md transition-all opacity-100 md:opacity-0 group-hover:opacity-100 z-20 ${
+                    isDark ? 'bg-gray-800 hover:bg-gray-700 text-gray-400' : 'bg-white hover:bg-gray-50 text-gray-500 shadow-sm border'
+                  }`}
+                  title="Copy options"
+                >
+                  {copiedId === 'options' ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                </button>
+                <div className={`p-6 rounded-lg border ${isDark ? 'bg-gray-900 border-gray-700' : 'bg-gray-100 border-gray-200'}`}>
+                  <pre className={`font-mono text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'} leading-relaxed`}>
 {docData.sections.options.code}
-                </pre>
+                  </pre>
+                </div>
               </div>
             </div>
 
