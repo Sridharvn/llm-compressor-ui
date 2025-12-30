@@ -15,7 +15,7 @@
     "@tailwindcss/vite": "^4.1.18",
     "buffer": "^6.0.3",
     "js-tiktoken": "^1.0.21",
-    "llm-chat-msg-compressor": "^1.0.5",
+    "llm-chat-msg-compressor": "^1.0.6",
     "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.562.0",
     "prismjs": "^1.30.0",
