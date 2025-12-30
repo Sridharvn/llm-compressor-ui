@@ -1,4 +1,4 @@
-import { getEncoding, type TiktokenEncoding } from "js-tiktoken";
+import { getEncoding } from "js-tiktoken";
 
 // Using cl100k_base as it's the standard for GPT-3.5 and GPT-4
 // You can also use "o200k_base" for GPT-4o if supported by the version installed
