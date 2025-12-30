@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import { useDocumentation } from './hooks/useDocumentation';
+import { countTokens, getEncodingName } from './utils/tokenizer';
 
 const SAMPLE_JSON = {
   "metadata": {
@@ -186,7 +187,7 @@ export default function App() {
   // Stats
   const stats = useMemo(() => {
     const inputSize = new Blob([input]).size;
-    const inputTokens = Math.ceil(input.length / 4);
+    const inputTokens = countTokens(input);
 
     if (error || !input.trim() || !output) {
       return {
@@ -202,8 +203,8 @@ export default function App() {
     const outputSize = new Blob([output]).size;
     const savings = inputSize > 0 ? ((inputSize - outputSize) / inputSize) * 100 : 0;
     
-    // Heuristic token estimation (1 token ≈ 4 chars)
-    const outputTokens = Math.ceil(output.length / 4);
+    // Precise token counting using js-tiktoken
+    const outputTokens = countTokens(output);
     const tokenSavings = inputTokens > 0 ? ((inputTokens - outputTokens) / inputTokens) * 100 : 0;
 
     return {
@@ -417,7 +418,12 @@ export default function App() {
               </div>
               <div className="space-y-2">
                 <div className="font-mono text-2xl font-bold">{stats.inputSize} B</div>
-                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{stats.inputTokens} tokens</div>
+                <div 
+                  className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
+                  title={`Calculated using ${getEncodingName()}`}
+                >
+                  {stats.inputTokens} tokens
+                </div>
               </div>
             </div>
 
@@ -431,7 +437,12 @@ export default function App() {
               </div>
               <div className="space-y-2">
                 <div className={`font-mono text-2xl font-bold ${parseFloat(stats.tokenSavings) > 0 ? 'text-green-600 dark:text-green-400' : parseFloat(stats.tokenSavings) < 0 ? 'text-red-600 dark:text-red-400' : ''}`}>{stats.outputSize} B</div>
-                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{stats.outputTokens} tokens</div>
+                <div 
+                  className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
+                  title={`Calculated using ${getEncodingName()}`}
+                >
+                  {stats.outputTokens} tokens
+                </div>
               </div>
             </div>
 
@@ -486,7 +497,10 @@ export default function App() {
           {/* Visual Progress Bar */}
           <div className={`p-4 rounded-lg border ${isDark ? 'bg-gray-800/20 border-gray-700/30' : 'bg-gray-50/50 border-gray-200/30'}`}>
             <div className="flex items-center justify-between mb-3">
-              <span className={`text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Compression Analysis</span>
+              <div className="flex flex-col">
+                <span className={`text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Compression Analysis</span>
+                <span className={`text-[10px] ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>Using {getEncodingName()}</span>
+              </div>
               <span className={`text-xs font-mono ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                 {stats.inputTokens} → {stats.outputTokens} tokens
               </span>
