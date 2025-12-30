@@ -483,12 +483,14 @@ export default function App() {
                 </div>
               </div>
               <div className="space-y-2">
-                <div className="font-mono text-2xl font-bold">{stats.inputSize} B</div>
                 <div 
-                  className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
+                  className="font-mono text-2xl font-bold"
                   title={`Calculated using ${getEncodingName()}`}
                 >
                   {stats.inputTokens} tokens
+                </div>
+                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                  {stats.inputSize} B
                 </div>
               </div>
             </div>
@@ -502,12 +504,14 @@ export default function App() {
                 </div>
               </div>
               <div className="space-y-2">
-                <div className={`font-mono text-2xl font-bold ${parseFloat(stats.tokenSavings) > 0 ? 'text-green-600 dark:text-green-400' : parseFloat(stats.tokenSavings) < 0 ? 'text-red-600 dark:text-red-400' : 'text-blue-600 dark:text-blue-400'}`}>{stats.outputSize} B</div>
                 <div 
-                  className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
+                  className={`font-mono text-2xl font-bold ${parseFloat(stats.tokenSavings) > 0 ? 'text-green-600 dark:text-green-400' : parseFloat(stats.tokenSavings) < 0 ? 'text-red-600 dark:text-red-400' : 'text-blue-600 dark:text-blue-400'}`}
                   title={`Calculated using ${getEncodingName()}`}
                 >
                   {stats.outputTokens} tokens
+                </div>
+                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                  {stats.outputSize} B
                 </div>
               </div>
             </div>
