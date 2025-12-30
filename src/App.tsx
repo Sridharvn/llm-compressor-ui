@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { optimize, restore } from 'llm-chat-msg-compressor';
 import debounce from 'lodash.debounce';
 import Editor from 'react-simple-code-editor';
@@ -100,30 +100,33 @@ export default function App() {
   }, [isDark]);
 
   // Optimization Logic
-  const runOptimization = useCallback(
-    debounce((val: string, opts: Options) => {
-      if (!val.trim()) {
-        setOutput('');
-        setError(null);
-        return;
-      }
+  const runOptimization = useMemo(
+    () =>
+      debounce((val: string, opts: Options) => {
+        if (!val.trim()) {
+          setOutput('');
+          setError(null);
+          return;
+        }
 
-      try {
-        const parsed = JSON.parse(val);
-        const optimized = optimize(parsed, {
-          aggressive: opts.aggressive,
-          unsafe: opts.unsafe,
-        });
-        setOutput(JSON.stringify(optimized, null, 2));
-        setError(null);
-      } catch (e: any) {
-        const match = e.message.match(/at line (\d+)/);
-        setError({
-          message: e.message,
-          line: match ? parseInt(match[1]) : undefined
-        });
-      }
-    }, 300),
+        try {
+          const parsed = JSON.parse(val);
+          const optimized = optimize(parsed, {
+            aggressive: opts.aggressive,
+            unsafe: opts.unsafe,
+          });
+          setOutput(JSON.stringify(optimized, null, 2));
+          setError(null);
+        } catch (e: unknown) {
+          let message = 'Unknown error';
+          if (e instanceof Error) message = e.message;
+          const match = message.match(/at line (\d+)/);
+          setError({
+            message,
+            line: match ? parseInt(match[1]) : undefined
+          });
+        }
+      }, 300),
     []
   );
 
@@ -153,7 +156,7 @@ export default function App() {
           color: isDark ? '#fff' : '#1f2937',
         },
       });
-    } catch (err) {
+    } catch {
       toast.error('Failed to copy');
     }
   };
@@ -180,7 +183,7 @@ export default function App() {
       } else {
         toast.error('Verification Failed: Data Mismatch');
       }
-    } catch (e) {
+    } catch {
       toast.error('Verification Error: Invalid JSON');
     }
   };
