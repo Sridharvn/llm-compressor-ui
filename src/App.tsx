@@ -7,7 +7,6 @@ import 'prismjs/components/prism-json';
 import 'prismjs/themes/prism-tomorrow.css';
 import { 
   Zap, 
-  RefreshCw, 
   Copy, 
   Trash2, 
   CheckCircle2, 
@@ -15,10 +14,7 @@ import {
   Moon, 
   Sun, 
   FileJson,
-  ExternalLink,
   Github,
-  Eye,
-  EyeOff,
   Info,
   Download
 } from 'lucide-react';
@@ -116,6 +112,7 @@ export default function App() {
     const saved = localStorage.getItem('llm-compressor-theme');
     return saved ? saved === 'dark' : true;
   });
+  // @ts-expect-error - activeTab and setActiveTab are planned for mobile tab implementation
   const [activeTab, setActiveTab] = useState<'input' | 'output'>('input');
   const [error, setError] = useState<{ message: string; line?: number } | null>(null);
 
