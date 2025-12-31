@@ -28,9 +28,9 @@ body {
 
 .dark .depth-elevated {
   box-shadow: 
-    0 4px 20px rgba(0,0,0,0.4),
-    0 1px 2px rgba(0,0,0,0.2),
-    inset 0 1px 0 rgba(255,255,255,0.05);
+    0 4px 18px rgba(0,0,0,0.25),
+    0 1px 2px rgba(0,0,0,0.12),
+    inset 0 1px 0 rgba(255,255,255,0.03);
 }
 
 .depth-recessed {
@@ -41,7 +41,7 @@ body {
 
 .dark .depth-recessed {
   box-shadow: 
-    inset 0 2px 8px rgba(0,0,0,0.3),
+    inset 0 2px 6px rgba(0,0,0,0.18),
     0 1px 0 rgba(255,255,255,0.02);
 }
 
@@ -58,8 +58,8 @@ body {
 
 .dark .depth-card:hover {
   box-shadow: 
-    0 20px 25px -5px rgba(0,0,0,0.5),
-    0 10px 10px -5px rgba(0,0,0,0.3);
+    0 16px 20px -5px rgba(0,0,0,0.35),
+    0 8px 10px -5px rgba(0,0,0,0.18);
 }
 
 /* Custom checkbox styling for better contrast */
@@ -180,9 +180,9 @@ pre[class*="language-"] {
 }
 
 .dark .line-numbers {
-  background-color: rgba(15, 23, 42, 0.5);
-  color: #475569;
-  border-color: rgba(30, 41, 59, 0.5);
+  background-color: rgba(39, 39, 42, 0.35);
+  color: #94a3b8;
+  border-color: rgba(82, 82, 91, 0.35);
 }
 
 html:not(.dark) .line-numbers {

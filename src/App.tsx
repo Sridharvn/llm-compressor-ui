@@ -116,11 +116,8 @@ export default function App() {
     const saved = localStorage.getItem('llm-compressor-options');
     return saved ? JSON.parse(saved) : { aggressive: false, unsafe: false };
   });
-  const [isDark, setIsDark] = useState(() => {
-    const saved = localStorage.getItem('llm-compressor-theme');
-    return saved ? saved === 'dark' : true;
-  });
   const [activeTab, setActiveTab] = useState<'input' | 'output'>('input');
+  const isDark = true; // dark mode only
   const [error, setError] = useState<{ message: string; line?: number } | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
@@ -134,13 +131,9 @@ export default function App() {
   }, [options]);
 
   useEffect(() => {
-    localStorage.setItem('llm-compressor-theme', isDark ? 'dark' : 'light');
-    if (isDark) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [isDark]);
+    // Enforce dark mode only
+    document.documentElement.classList.add('dark');
+  }, []);
 
   // Optimization Logic
   const runOptimization = useMemo(
@@ -247,8 +240,8 @@ export default function App() {
         toast.success('Pasted JSON Formatted', {
           id: 'paste-format',
           style: {
-            background: isDark ? '#1f2937' : '#fff',
-            color: isDark ? '#fff' : '#1f2937',
+            background: '#1f2937',
+            color: '#d4d4d8',
           },
         });
       }, 0);
@@ -279,8 +272,8 @@ export default function App() {
       
       toast.success('Copied to clipboard!', {
         style: {
-          background: isDark ? '#1f2937' : '#fff',
-          color: isDark ? '#fff' : '#1f2937',
+          background: '#1f2937',
+          color: '#d4d4d8',
         },
       });
     } catch {
@@ -311,8 +304,8 @@ export default function App() {
       setTimeout(() => setCopiedId(null), 2000);
       toast.success('Copied to clipboard!', {
         style: {
-          background: isDark ? '#1f2937' : '#fff',
-          color: isDark ? '#fff' : '#1f2937',
+          background: '#1f2937',
+          color: '#d4d4d8',
         },
       });
     } catch {
@@ -406,11 +399,11 @@ export default function App() {
   };
 
   return (
-    <div className={`min-h-screen flex flex-col transition-colors duration-300 ${isDark ? 'bg-zinc-950 text-zinc-100' : 'bg-zinc-50 text-zinc-900'}`}>
+    <div className="min-h-screen flex flex-col transition-colors duration-300 bg-zinc-800 text-zinc-100">
       <Toaster position="bottom-right" />
       
       {/* Header */}
-      <header className={`shrink-0 border-b ${isDark ? 'border-zinc-800 bg-zinc-900/50' : 'border-zinc-200 bg-white'} backdrop-blur-md z-10`}>
+      <header className="shrink-0 border-b border-zinc-600 bg-zinc-700/50 backdrop-blur-md z-10">
         <div className="max-w-[1600px] mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="bg-teal-600 p-1.5 rounded-lg">
@@ -419,7 +412,7 @@ export default function App() {
             <div>
               <h1 className="font-bold text-base tracking-tight">LLM Compressor</h1>
               <div className="flex items-center gap-2">
-                <p className={`text-[10px] ${isDark ? 'text-zinc-500' : 'text-zinc-600'}`}>{docData.title}</p>
+                <p className="text-[10px] text-zinc-400">{docData.title}</p>
                 <div 
                   className={`status-indicator ${docStatus.isLive ? 'live' : 'fallback'}`}
                   title={docStatus.isLive ? `Live data from NPM (last fetched: ${docStatus.lastFetched?.toLocaleString()})` : `Fallback data ${docStatus.error ? `(${docStatus.error})` : ''}`}
@@ -458,18 +451,12 @@ export default function App() {
             >
               <Github className="w-4 h-4" />
             </a>
-            <button 
-              onClick={() => setIsDark(!isDark)}
-              className={`p-2 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors`}
-            >
-              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            </button>
           </div>
         </div>
       </header>
 
       {/* Enhanced Stats Display */}
-      <div className={`shrink-0 border-b ${isDark ? 'border-zinc-800 bg-gradient-to-r from-zinc-900/40 via-zinc-900/30 to-zinc-900/40' : 'border-zinc-100 bg-gradient-to-r from-zinc-50/80 via-white/60 to-zinc-50/80'}`}>
+      <div className="shrink-0 border-b border-zinc-600 bg-gradient-to-r from-zinc-700/40 via-zinc-700/30 to-zinc-700/40">
         <div className="max-w-[1600px] mx-auto px-4 py-6">
           {/* Main Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
@@ -488,7 +475,7 @@ export default function App() {
                 >
                   {stats.inputTokens} tokens
                 </div>
-                <div className={`text-sm ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+                <div className="text-sm text-zinc-300">
                   {stats.inputSize} B
                 </div>
               </div>
@@ -497,7 +484,7 @@ export default function App() {
             {/* Optimized Size Card */}
             <div className={`p-6 rounded-xl border ${isDark ? 'bg-zinc-800/40 border-zinc-700/50 backdrop-blur-sm' : 'bg-white/80 border-zinc-200/50 backdrop-blur-sm shadow-sm'}`}>
               <div className="flex items-center justify-between mb-3">
-                <span className={`text-sm font-bold uppercase tracking-wider ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>Optimized</span>
+                <span className="text-sm font-bold uppercase tracking-wider text-zinc-300">Optimized</span>
                 <div className={`p-2 rounded-lg ${parseFloat(stats.tokenSavings) > 0 ? 'bg-teal-500/20' : parseFloat(stats.tokenSavings) < 0 ? 'bg-red-500/20' : 'bg-teal-500/20'}`}>
                   <Zap className={`w-4 h-4 ${parseFloat(stats.tokenSavings) > 0 ? 'text-teal-500' : parseFloat(stats.tokenSavings) < 0 ? 'text-red-500' : 'text-teal-500'}`} />
                 </div>
@@ -509,7 +496,7 @@ export default function App() {
                 >
                   {stats.outputTokens} tokens
                 </div>
-                <div className={`text-sm ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+                <div className="text-sm text-zinc-300">
                   {stats.outputSize} B
                 </div>
               </div>
@@ -564,13 +551,13 @@ export default function App() {
           </div>
 
           {/* Visual Progress Bar */}
-          <div className={`p-4 rounded-lg border ${isDark ? 'bg-zinc-800/20 border-zinc-700/30' : 'bg-zinc-50/50 border-zinc-200/30'}`}>
+          <div className="p-4 rounded-lg border bg-zinc-700/20 border-zinc-600/30">
             <div className="flex items-center justify-between mb-3">
               <div className="flex flex-col">
-                <span className={`text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>Compression Analysis</span>
-                <span className={`text-[10px] ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>Using {getEncodingName()}</span>
+                <span className="text-xs font-semibold uppercase tracking-wider text-zinc-300">Compression Analysis</span>
+                <span className="text-[10px] text-zinc-400">Using {getEncodingName()}</span>
               </div>
-              <span className={`text-xs font-mono ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+              <span className="text-xs font-mono text-zinc-400">
                 {stats.inputTokens} → {stats.outputTokens} tokens
               </span>
             </div>
@@ -583,7 +570,7 @@ export default function App() {
                     cx="32"
                     cy="32"
                     r="28"
-                    stroke={isDark ? '#27272a' : '#e4e4e7'}
+                    stroke="#374151"
                     strokeWidth="6"
                     fill="transparent"
                   />
@@ -613,7 +600,7 @@ export default function App() {
               {/* Linear Progress */}
               <div className="flex-1">
                 <div className="relative">
-                  <div className={`h-4 rounded-full overflow-hidden ${isDark ? 'bg-zinc-700' : 'bg-zinc-200'}`}>
+                  <div className="h-4 rounded-full overflow-hidden bg-zinc-600">
                     <div 
                       className={`h-full transition-all duration-700 ease-out progress-bar-glow ${
                         parseFloat(stats.tokenSavings) > 0 ? 'bg-gradient-to-r from-teal-500 to-emerald-400' :
@@ -627,7 +614,7 @@ export default function App() {
                   </div>
                   {/* Size comparison labels */}
                   <div className="flex justify-between mt-2 text-xs">
-                    <span className={isDark ? 'text-zinc-400' : 'text-zinc-600'}>0%</span>
+                    <span className="text-zinc-400">0%</span>
                     <span className={`font-semibold ${
                       parseFloat(stats.tokenSavings) > 0 ? 'text-teal-600 dark:text-teal-400' :
                       parseFloat(stats.tokenSavings) < 0 ? 'text-red-600 dark:text-red-400' :
@@ -635,7 +622,7 @@ export default function App() {
                     }`}>
                       {((stats.outputTokens / stats.inputTokens) * 100).toFixed(1)}% of original
                     </span>
-                    <span className={isDark ? 'text-zinc-400' : 'text-zinc-600'}>100%</span>
+                    <span className="text-zinc-400">100%</span>
                   </div>
                 </div>
               </div>
@@ -669,7 +656,7 @@ export default function App() {
           <div className="flex flex-wrap items-center justify-between gap-4">
 
             <div className="flex items-center gap-3">
-              <div className={`flex items-center gap-2 p-0.5 rounded-lg border ${isDark ? 'bg-zinc-800 border-zinc-600' : 'bg-zinc-100 border-zinc-300'}`}>
+              <div className="flex items-center gap-2 p-0.5 rounded-lg border bg-zinc-700 border-zinc-600">
                 <label className={`flex items-center gap-1.5 cursor-pointer group px-2 py-1 rounded-md transition-all ${isDark ? 'hover:bg-zinc-700' : 'hover:bg-white hover:shadow-sm'}`}>
                   <input 
                     id="aggressive-checkbox"
@@ -724,7 +711,7 @@ export default function App() {
 
         <div className="flex-1 flex flex-col md:flex-row gap-6 min-h-[500px]">
           {/* Input Pane */}
-          <div className={`flex-1 flex flex-col rounded-2xl border overflow-hidden transition-all ${activeTab === 'input' ? 'flex' : 'hidden md:flex'} ${isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200 shadow-xl shadow-zinc-200/50'}`}>
+          <div className={`flex-1 flex flex-col rounded-2xl border overflow-hidden transition-all ${activeTab === 'input' ? 'flex' : 'hidden md:flex'} bg-zinc-700 border-zinc-600`}>
             <div className={`shrink-0 px-5 py-3 border-b flex items-center justify-between ${isDark ? 'bg-zinc-900/50 border-zinc-800' : 'bg-zinc-50/50 border-zinc-200'}`}>
               <div className="flex items-center gap-3">
                 <div className="p-1.5 rounded-lg bg-teal-500/10">
@@ -775,7 +762,7 @@ export default function App() {
           </div>
 
           {/* Output Pane */}
-          <div className={`flex-1 flex flex-col rounded-2xl border overflow-hidden transition-all ${activeTab === 'output' ? 'flex' : 'hidden md:flex'} ${isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200 shadow-xl shadow-zinc-200/50'}`}>
+          <div className={`flex-1 flex flex-col rounded-2xl border overflow-hidden transition-all ${activeTab === 'output' ? 'flex' : 'hidden md:flex'} bg-zinc-700 border-zinc-600`}>
             <div className={`shrink-0 px-5 py-3 border-b flex items-center justify-between ${isDark ? 'bg-zinc-900/50 border-zinc-800' : 'bg-zinc-50/50 border-zinc-200'}`}>
               <div className={`flex p-1 rounded-xl border ${isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-100 border-zinc-200'}`}>
                 <button 
@@ -832,7 +819,7 @@ export default function App() {
       </main>
 
       {/* Documentation Section */}
-      <div className={`border-t ${isDark ? 'border-zinc-900 bg-zinc-950/50' : 'border-zinc-200 bg-zinc-50/50'}`}>
+      <div className="border-t border-zinc-600 bg-zinc-800/50">
         <div className="max-w-[1600px] mx-auto px-4 py-20">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             
@@ -946,7 +933,7 @@ export default function App() {
                   >
                     {copiedId === 'installation' ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
                   </button>
-                  <div className={`p-6 rounded-2xl border depth-recessed ${isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-100 border-zinc-200'}`}>
+                  <div className={`p-6 rounded-2xl border depth-recessed ${isDark ? 'bg-zinc-800 border-zinc-600' : 'bg-zinc-100 border-zinc-200'}`}>
                     <code className={`font-mono text-sm font-bold ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>
                       {docData.sections.installation.command}
                     </code>
@@ -968,7 +955,7 @@ export default function App() {
                   >
                     {copiedId === 'usage' ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
                   </button>
-                  <div className={`p-6 rounded-2xl border depth-recessed ${isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-100 border-zinc-200'} overflow-x-auto`}>
+                  <div className={`p-6 rounded-2xl border depth-recessed ${isDark ? 'bg-zinc-800 border-zinc-600' : 'bg-zinc-100 border-zinc-200'} overflow-x-auto`}>
                     <pre className={`font-mono text-xs ${isDark ? 'text-zinc-400' : 'text-zinc-600'} leading-relaxed`}>
 {docData.sections.usage.code}
                     </pre>
@@ -999,7 +986,7 @@ export default function App() {
                   const colorClass = colorMap[strategy.color] || 'text-zinc-500';
                   
                   return (
-                    <div key={index} className={`p-8 rounded-2xl border depth-elevated transition-all hover:scale-[1.02] ${isDark ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'}`}>
+                    <div key={index} className={`p-8 rounded-2xl border depth-elevated transition-all hover:scale-[1.02] ${isDark ? 'bg-zinc-700/50 border-zinc-600' : 'bg-white border-zinc-200 shadow-sm'}`}>
                       <h4 className={`font-black text-lg mb-3 flex items-center gap-3 ${colorClass}`}>
                         <span className="text-2xl">{strategy.icon}</span>
                         {strategy.title}
@@ -1068,7 +1055,7 @@ export default function App() {
       </div>
 
       {/* Footer */}
-      <footer className={`shrink-0 py-8 px-4 border-t ${isDark ? 'border-zinc-900 bg-zinc-950 text-zinc-600' : 'border-zinc-200 bg-white text-zinc-400'}`}>
+      <footer className="shrink-0 py-8 px-4 border-t border-zinc-600 bg-zinc-800 text-zinc-400">
         <div className="max-w-[1600px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <Zap className="w-4 h-4 text-teal-500" />
