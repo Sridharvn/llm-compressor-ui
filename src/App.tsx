@@ -13,8 +13,7 @@ import {
   Trash2, 
   CheckCircle2, 
   AlertCircle, 
-  Moon, 
-  Sun, 
+
   FileJson,
   Github,
   Info,
