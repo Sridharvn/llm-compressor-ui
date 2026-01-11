@@ -710,7 +710,7 @@ export default function App() {
 
         <div className="flex-1 flex flex-col md:flex-row gap-6 min-h-[500px]">
           {/* Input Pane */}
-          <div className={`flex-1 flex flex-col rounded-2xl border overflow-hidden transition-all ${activeTab === 'input' ? 'flex' : 'hidden md:flex'} bg-zinc-700 border-zinc-600`}>
+          <div className={`flex-1 min-w-0 flex flex-col rounded-2xl border overflow-hidden transition-all ${activeTab === 'input' ? 'flex' : 'hidden md:flex'} bg-zinc-700 border-zinc-600`}>
             <div className={`shrink-0 px-5 py-3 border-b flex items-center justify-between ${isDark ? 'bg-zinc-900/50 border-zinc-800' : 'bg-zinc-50/50 border-zinc-200'}`}>
               <div className="flex items-center gap-3">
                 <div className="p-1.5 rounded-lg bg-teal-500/10">
@@ -736,7 +736,7 @@ export default function App() {
                     onPaste={handlePaste}
                     highlight={code => highlightWithErrors(code, error?.line)}
                     padding={24}
-                    className="flex-1 focus:outline-none"
+                    className="flex-1 min-w-0 focus:outline-none"
                     textareaId="input-json-editor"
                     style={{
                       fontFamily: 'JetBrains Mono, Fira Code, monospace',
@@ -761,7 +761,7 @@ export default function App() {
           </div>
 
           {/* Output Pane */}
-          <div className={`flex-1 flex flex-col rounded-2xl border overflow-hidden transition-all ${activeTab === 'output' ? 'flex' : 'hidden md:flex'} bg-zinc-700 border-zinc-600`}>
+          <div className={`flex-1 min-w-0 flex flex-col rounded-2xl border overflow-hidden transition-all ${activeTab === 'output' ? 'flex' : 'hidden md:flex'} bg-zinc-700 border-zinc-600`}>
             <div className={`shrink-0 px-5 py-3 border-b flex items-center justify-between ${isDark ? 'bg-zinc-900/50 border-zinc-800' : 'bg-zinc-50/50 border-zinc-200'}`}>
               <div className={`flex p-1 rounded-xl border ${isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-100 border-zinc-200'}`}>
                 <button 
@@ -800,7 +800,7 @@ export default function App() {
                     highlight={code => highlight(code, languages.json, 'json')}
                     padding={24}
                     readOnly
-                    className="flex-1"
+                    className="flex-1 min-w-0"
                     textareaId="output-json-editor"
                     style={{
                       fontFamily: 'JetBrains Mono, Fira Code, monospace',
@@ -954,8 +954,8 @@ export default function App() {
                   >
                     {copiedId === 'usage' ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
                   </button>
-                  <div className={`p-6 rounded-2xl border depth-recessed ${isDark ? 'bg-zinc-800 border-zinc-600' : 'bg-zinc-100 border-zinc-200'} overflow-x-auto`}>
-                    <pre className={`font-mono text-xs ${isDark ? 'text-zinc-400' : 'text-zinc-600'} leading-relaxed`}>
+                  <div className={`p-6 rounded-2xl border depth-recessed min-w-0 ${isDark ? 'bg-zinc-800 border-zinc-600' : 'bg-zinc-100 border-zinc-200'} overflow-x-auto`}>
+                    <pre className={`font-mono text-xs whitespace-pre-wrap break-words max-w-full ${isDark ? 'text-zinc-400' : 'text-zinc-600'} leading-relaxed`}>
 {docData.sections.usage.code}
                     </pre>
                   </div>
@@ -1013,8 +1013,8 @@ export default function App() {
                 >
                   {copiedId === 'options' ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
                 </button>
-                <div className={`p-8 rounded-2xl border depth-recessed ${isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-100 border-zinc-200'}`}>
-                  <pre className={`font-mono text-sm ${isDark ? 'text-zinc-400' : 'text-zinc-600'} leading-relaxed`}>
+                <div className="p-8 rounded-2xl border depth-recessed min-w-0 overflow-x-auto">
+                  <pre className="font-mono text-sm whitespace-pre-wrap break-words max-w-full leading-relaxed">
 {docData.sections.options.code}
                   </pre>
                 </div>
